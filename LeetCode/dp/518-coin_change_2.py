@@ -1,3 +1,11 @@
+# Knapsack Problem
+#
+# f[x]: the number of combinations that make up the amount x
+#
+# f[x] = 1              if i = 0
+#      = 
+#
+
 class Solution(object):
     def change(self, amount, coins):
         """
