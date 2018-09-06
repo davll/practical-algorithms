@@ -1,4 +1,4 @@
-# Knapsack Problem
+# Coin Change Problem
 #
 # f[x]: the minimum number of coins that make up the amount x
 # coins: the set of coins

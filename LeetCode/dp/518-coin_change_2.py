@@ -1,4 +1,4 @@
-# Knapsack Problem
+# Coin Change Problem
 #
 # f[x]: the number of combinations that make up the amount x
 #
