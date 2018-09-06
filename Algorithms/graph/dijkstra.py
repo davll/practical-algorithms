@@ -1,3 +1,4 @@
+import math
 import heapq
 import unittest
 
@@ -25,29 +26,33 @@ def dijkstra(n, edges, s):
     edges: [[(int, W)]] => adjacency list
     s: int => source vertex
     """
+    pendings = set()
     visited = [False] * n
-    costs, parents = [None] * n, [i for i in range(n)]
+    costs, parents = [float('inf')] * n, [i for i in range(n)]
     costs[s] = 0
+    pendings.add(s)
     def candidates():
-        for i in range(n):
-            if not visited[i] and costs[i] != None:
-                yield (i, costs[i])
-    def extract():
         for _ in range(n):
-            result = min(candidates(), default = None, key = lambda x: x[1])
-            if result:
-                (i, _) = result
-                visited[i] = True
-                yield i
+            v = -1
+            for i in pendings:
+                assert i in range(0, n)
+                assert not visited[i]
+                if v == -1 or costs[v] > costs[i]:
+                    v = i
+            if v != -1:
+                pendings.remove(v)
+                visited[v] = True
+                yield v
             else:
                 break
     def relax(v):
         for (t, w) in edges[v]:
             if not visited[t]:
-                if costs[t] == None or costs[t] > costs[v] + w:
+                if costs[t] > costs[v] + w:
                     costs[t] = costs[v] + w
                     parents[t] = v
-    for i in extract():
+                    pendings.add(t)
+    for i in candidates():
         relax(i)
     return DijkstraResult(n, costs, parents)
 
@@ -69,7 +74,7 @@ class _PQEdge:
 
 def dijkstra2(n, edges, s):
     visited = [False] * n
-    costs, parents = [None] * n, [i for i in range(n)]
+    costs, parents = [float('inf')] * n, [i for i in range(n)]
     costs[s] = 0
     visited[s] = True
     queue, u = [], s
