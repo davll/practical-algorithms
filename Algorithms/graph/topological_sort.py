@@ -1,5 +1,6 @@
 from collections import deque
 
+# Kahn's algorithm
 def toposort(n, edges):
     """
     n: int => number of vertices
@@ -33,22 +34,3 @@ def toposort(n, edges):
     else:
         # a topologically sorted vertices
         return result
-
-class Solution:
-    def findOrder(self, numCourses, prerequisites):
-        """
-        :type numCourses: int
-        :type prerequisites: List[List[int]]
-        :rtype: List[int]
-        """
-        n = numCourses
-        edges = [[] for _ in range(n)]
-        for e in prerequisites:
-            u, v = e
-            edges[u].append(v)
-        result = toposort(n, edges)
-        if result:
-            result.reverse()
-            return result
-        else:
-            return []
