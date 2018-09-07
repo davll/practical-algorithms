@@ -1,7 +1,7 @@
 import unittest
 
 class UnionFind:
-    """
+    """Disjointed Set (Union Find)
     """
     def __init__(self, n):
         self._id = list(range(n))
@@ -23,6 +23,7 @@ class UnionFind:
     def connected(self, p, q):
         return self.find(p) == self.find(q)
     # 
+    @property
     def count(self):
         return self._count
     #

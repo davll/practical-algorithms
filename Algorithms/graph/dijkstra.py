@@ -2,37 +2,79 @@ import math
 import heapq
 import unittest
 
-class DijkstraResult:
-    def __init__(self, n, costs, parents):
-        self._costs = costs
-        self._parents = parents
+class SPT:
+    """Shortest Path Tree of the single source vertex
+
+    Attributes:
+        n (int): number of vertices
+        s (int): index of source vertex
+        costs ([W]): costs[v] = distance from the source to v
+        parents ([int]): parents[v] = the previous vertex followed by v in the shortest path from s to v
+
+    """
+    def __init__(self, n, s, costs, parents):
+        self.n = n
+        self.s = s
+        self.costs = costs
+        self.parents = parents
     #
     def distance(self, v):
-        return self._costs[v]
+        """Distance from source to v
+
+        Args:
+            v (int): index of vertex
+        
+        Returns:
+            W: the total weight of the shortest path from s to v
+
+        """
+        return self.costs[v]
     #
     def path(self, v):
+        """Generate the shortest path from source to v
+
+        Args:
+            v (int): index of vertex
+
+        Returns:
+            [int]: list of vertices of the shortest path from s to v
+
+        """
         path = [v]
         i = v
-        while self._parents[i] != i:
-            p = self._parents[i]
+        while self.parents[i] != -1:
+            p = self.parents[i]
             path.append(p)
             i = p
         path.reverse()
         return path
 
 def dijkstra(n, edges, s):
+    """Compute a shortest path tree of the single source vertex
+
+    Args:
+        n (int): number of vertices
+        edges ([[(int, W)]]): adjacency list, (v, w) = edges[u][i] denotes an edge (u->v) with weight w
+        s (int): index of source vertex
+
+    Returns:
+        SPT: shortest path tree
+
     """
-    n: int => number of vertices
-    edges: [[(int, W)]] => adjacency list
-    s: int => source vertex
-    """
+    # pending: the set of unvisited vertices with finitie costs[v] (not infinite)
     pendings = set()
+    # visited[v] = True if visited
     visited = [False] * n
-    costs, parents = [float('inf')] * n, [i for i in range(n)]
+    # costs[v] = distance from s to v
+    # parents[v] = the previous vertex followed by v in the shortest path from s to v
+    costs, parents = [math.inf] * n, [-1 for _ in range(n)]
+    # process source vertex in the beginning
     costs[s] = 0
     pendings.add(s)
+    # extract candidates for relaxation
     def candidates():
         for _ in range(n):
+            # find the shortest path from s to v with visited[v] == False
             v = -1
             for i in pendings:
                 assert i in range(0, n)
@@ -40,21 +82,28 @@ def dijkstra(n, edges, s):
                 if v == -1 or costs[v] > costs[i]:
                     v = i
             if v != -1:
+                # mark v visited
                 pendings.remove(v)
                 visited[v] = True
                 yield v
             else:
+                # halt the computation
                 break
-    def relax(v):
-        for (t, w) in edges[v]:
-            if not visited[t]:
-                if costs[t] > costs[v] + w:
-                    costs[t] = costs[v] + w
-                    parents[t] = v
-                    pendings.add(t)
+    # relax all unvisited neighbouring vertices around the vertex u
+    def relax(u):
+        # for each edge u -> v
+        for (v, w) in edges[u]:
+            if not visited[v]:
+                # update v if there is a shorter path
+                if costs[v] > costs[u] + w:
+                    costs[v] = costs[u] + w
+                    parents[v] = u
+                    # mark v pending
+                    pendings.add(v)
+    # execution
     for i in candidates():
         relax(i)
-    return DijkstraResult(n, costs, parents)
+    return SPT(n, s, costs, parents)
 
 class _PQEdge:
     def __init__(self, u, v, w):
@@ -74,7 +123,7 @@ class _PQEdge:
 
 def dijkstra2(n, edges, s):
     visited = [False] * n
-    costs, parents = [float('inf')] * n, [i for i in range(n)]
+    costs, parents = [math.inf] * n, [-1 for _ in range(n)]
     costs[s] = 0
     visited[s] = True
     queue, u = [], s
@@ -95,7 +144,7 @@ def dijkstra2(n, edges, s):
         costs[u] = e.w
         parents[u] = e.u
         visited[u] = True
-    return DijkstraResult(n, costs, parents)
+    return SPT(n, s, costs, parents)
 
 class TestDijkstra(unittest.TestCase):
     def test_case1(self):

@@ -10,7 +10,7 @@ import heapq
 def dijkstra(n, edges, s):
     pendings = set()
     visited = [False] * n
-    costs = [float('inf')] * n
+    costs = [math.inf] * n
     costs[s] = 0
     pendings.add(s)
     def candidates():
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     for t_itr in range(t):
         n, m = filter(int, input().split())
 
-        edges = [[] * n for _ in range(n)]
+        edges = [[] for _ in range(n)]
         for _ in range(m):
             u, v, w = map(int, input().rstrip().split())
             u, v = u-1, v-1
