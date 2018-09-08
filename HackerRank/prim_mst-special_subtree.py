@@ -1,10 +1,7 @@
 #!/bin/python3
+# https://www.hackerrank.com/challenges/primsmstsub/problem
 
 import math
-import os
-#import random
-#import re
-import sys
 
 # Complete the prims function below.
 def prims(n, edges, s):
@@ -41,20 +38,13 @@ def prims(n, edges, s):
     return weight
 
 if __name__ == '__main__':
-    fptr = open(os.environ['OUTPUT_PATH'], 'w')
-
     n, m = map(int, input().split())
-
     edges = [[] for _ in range(n)]
     for _ in range(m):
         u, v, w = map(int, input().rstrip().split())
         u, v = u-1, v-1
         edges[u].append((v, w))
         edges[v].append((u, w))
-
     start = int(input())
-
     result = prims(n, edges, start-1)
-
-    fptr.write(str(result) + '\n')
-    fptr.close()
+    print(str(result))

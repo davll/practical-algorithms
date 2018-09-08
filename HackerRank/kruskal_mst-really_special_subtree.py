@@ -1,7 +1,5 @@
 #!/bin/python3
-
-import os
-import sys
+# https://www.hackerrank.com/challenges/kruskalmstrsub/problem
 
 class UnionFind:
     """

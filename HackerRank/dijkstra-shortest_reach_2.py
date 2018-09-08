@@ -1,10 +1,7 @@
 #!/bin/python3
+# https://www.hackerrank.com/challenges/dijkstrashortreach/problem
 
 import math
-import os
-#import random
-#import re
-import sys
 import heapq
 
 def dijkstra(n, edges, s):
@@ -45,26 +42,15 @@ def shortestReach(n, edges, s):
     return list(map(lambda x: x[1], filter(lambda x: x[0] != s, enumerate(costs))))
 
 if __name__ == '__main__':
-    fptr = open(os.environ['OUTPUT_PATH'], 'w')
-
-    t = int(input())
-
-    for t_itr in range(t):
-        n, m = filter(int, input().split())
-
+    T = int(input())
+    for _ in range(T):
+        n, m = map(int, input().split())
         edges = [[] for _ in range(n)]
         for _ in range(m):
             u, v, w = map(int, input().rstrip().split())
             u, v = u-1, v-1
             edges[u].append((v, w))
             edges[v].append((u, w))
-
         s = int(input())
-        
         result = shortestReach(n, edges, s-1)
-
-        #print(' '.join(map(str, result)))
-        fptr.write(' '.join(map(str, result)))
-        fptr.write('\n')
-
-    fptr.close()
+        print(' '.join(map(str, result)))

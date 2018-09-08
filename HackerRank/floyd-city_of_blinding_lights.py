@@ -1,8 +1,7 @@
 #!/bin/python3
+# https://www.hackerrank.com/challenges/floyd-city-of-blinding-lights/problem
 
 import math
-import os
-import sys
 
 def floyd_warshall(n, edges):
     dist = [[math.inf] * n for _ in range(n)]

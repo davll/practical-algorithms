@@ -1,8 +1,7 @@
 #!/bin/python3
+# https://www.hackerrank.com/challenges/journey-to-the-moon/problem
 
 import math
-import os
-import sys
 
 class UnionFind:
     """Disjointed Set (Union Find)
@@ -73,16 +72,10 @@ def journeyToMoon(n, edges):
     return method1(n, edges)
 
 if __name__ == '__main__':
-    #fptr = open(os.environ['OUTPUT_PATH'], 'w')
-
     n, p = map(int, input().split())
-
     edges = []
     for _ in range(p):
         edges.append(tuple(map(int, input().rstrip().split())))
 
     result = journeyToMoon(n, edges)
-
-    #fptr.write(str(result) + '\n')
-    #fptr.close()
     print(str(result))
