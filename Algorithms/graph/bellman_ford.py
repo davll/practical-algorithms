@@ -26,4 +26,5 @@ def bellman_ford(n, edges, s):
     for (u, v, w) in edges:
         if dist[v] > dist[u] + w:
             return None
+    # return list of distances
     return dist
