@@ -1,9 +1,11 @@
 # Coin Change Problem
 #
-# f[x]: the number of combinations that make up the amount x
+# f[x;c]: the number of combinations that make up the amount x
+#         with 1...c coin types
 #
-# f[x] = 1              if i = 0
-#      = 
+# f[x;c] = 1                    if x = 0
+#        = f[x;c-1]             if x < c
+#        = f[x;c-1] + f[x-c;c]  if x >= c
 #
 
 class Solution(object):

@@ -1,6 +1,13 @@
 #!/bin/python3
 # https://www.hackerrank.com/challenges/max-array-sum/problem
 
+# f[i]: the maximum sum of non-adjacent items among 1~i items
+#
+# f[i] = a[0]                   if i = 0
+#      = max { a[0], a[1] }     if i = 1
+#      = max { a[i], f[i-1], a[i] + f[i-2] } if i >= 2
+#
+
 # Complete the maxSubsetSum function below.
 def maxSubsetSum(arr):
     n = len(arr)
