@@ -53,6 +53,23 @@ def ford_fulkerson(n, caps, source, sink):
         apply_augmenting_path(path, f)
     return flow
 
+def fast_tree_flow(n, caps, source, sink):
+    pass
+
+def fill_caps(n, adj, caps):
+    # do bfs to fill caps
+    for i in range(n):
+        visited = [False] * n
+        q = deque()
+        q.append(i)
+        while len(q) > 0:
+            u = q.popleft()
+            visited[u] = True
+            for v in adj[u]:
+                if not visited[v]:
+                    caps[i][v] = caps[i][u] + caps[u][v]
+                    q.append(v)
+
 #
 # Complete the treeFlow function below.
 #
@@ -61,30 +78,17 @@ def treeFlow(n, caps):
 
 if __name__ == '__main__':
     n = int(input())
-    edges = []
-    caps = [[math.inf] * n for _ in range(n)]
+    adj = [[] for _ in range(n)]
+    #caps = [[0] * n for _ in range(n)]
     for _ in range(n-1):
         u, v, w = map(int, input().rstrip().split())
         u, v = u-1, v-1
-        edges.append((u, v, w))
-        if math.isinf(caps[u][v]):
-            caps[u][v] = w
-        else:
-            caps[u][v] += w
-        if math.isinf(caps[v][u]):
-            caps[v][u] = w
-        else:
-            caps[v][u] += w
-    for i in range(n):
-        caps[i][i] = 0
-    for k in range(n):
-        for i in range(n):
-            for j in range(n):
-                caps[i][j] = min(caps[i][j], caps[i][k] + caps[k][j])
-    for i in range(n):
-        for j in range(n):
-            if math.isinf(caps[i][j]):
-                caps[i][j] = 0
+        adj[u].append((v, w))
+        adj[v].append((u, w))
+        #caps[u][v] += w
+        #caps[v][u] += w
+    print("input complete", file = stderr)
+    #fill_caps(n, adj, caps)
     #print(str(caps), file = stderr)
-    result = treeFlow(n, caps)
-    print(str(result))
+    #result = treeFlow(n, caps)
+    #print(str(result))
