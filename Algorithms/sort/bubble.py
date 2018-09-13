@@ -1,3 +1,4 @@
+# T = O(n^2)
 def bubblesort(a):
     n = len(a)
     for _ in range(n):

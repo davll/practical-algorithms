@@ -1,3 +1,4 @@
+# T = O(nk)
 def countsort(arr):
     maxval, minval = max(arr), min(arr)
     n, k = len(arr), (maxval - minval + 1)
@@ -33,6 +34,7 @@ def bucketsort(arr, nb, key):
         arr[i:j] = b[:]
         i = j
 
+# T = O(nw)
 def radixsort(arr):
     n, maxval = len(arr), max(arr)
     tmp = [0] * n
