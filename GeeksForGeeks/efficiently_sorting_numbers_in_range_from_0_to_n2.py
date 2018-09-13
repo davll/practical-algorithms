@@ -1,3 +1,7 @@
+# https://practice.geeksforgeeks.org/problems/efficiently-sorting-number-from-0-to-n2-1/0
+
+from sys import stdin, stdout
+
 def countsort(arr):
     maxval, minval = max(arr), min(arr)
     n, k = len(arr), (maxval - minval + 1)
@@ -15,23 +19,6 @@ def countsort(arr):
         result[j] = x
         count[x - minval] -= 1
     return result
-
-def bucketsort(arr, nb, key):
-    n = len(arr)
-    buckets = [[] for _ in range(nb)]
-    # group array elements
-    for x in arr:
-        k = key(x)
-        buckets[k].append(x)
-    # sort individual buckets
-    for b in buckets:
-        b.sort()
-    # concatenate all buckets
-    i = 0
-    for b in buckets:
-        j = i + len(b)
-        arr[i:j] = b[:]
-        i = j
 
 def radixsort(arr):
     n, maxval = len(arr), max(arr)
@@ -52,3 +39,11 @@ def radixsort(arr):
         arr, tmp = tmp, arr
         exp *= 10
     return arr
+
+if __name__ == "__main__":
+    for _ in range(int(stdin.readline().strip())):
+        n = int(stdin.readline().strip())
+        arr = list(map(int, stdin.readline().strip().split()))
+        arr = radixsort(arr)
+        stdout.write(' '.join(map(str, arr)) + '\n')
+

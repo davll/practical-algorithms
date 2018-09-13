@@ -1,5 +1,10 @@
 # Binary Indexed Tree (aka Fenwick Tree)
 
+#
+#
+#
+#
+
 def bit_zeros(n):
     return [0] * (n+1)
 
