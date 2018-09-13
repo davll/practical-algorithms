@@ -67,7 +67,7 @@ def dijkstra(n, edges, s):
     visited = [False] * n
     # costs[v] = distance from s to v
     # parents[v] = the previous vertex followed by v in the shortest path from s to v
-    costs, parents = [math.inf] * n, [-1 for _ in range(n)]
+    costs, parents = [math.inf] * n, [-1] * n
     # process source vertex in the beginning
     costs[s] = 0
     pendings.add(s)
@@ -105,45 +105,27 @@ def dijkstra(n, edges, s):
         relax(i)
     return SPT(n, s, costs, parents)
 
-class _PQEdge:
-    def __init__(self, u, v, w):
-        self.u = u
-        self.v = v
-        self.w = w
-    def __eq__(self, other):
-        return self.w == other.w
-    def __lt__(self, other):
-        return self.w < other.w
-    def __gt__(self, other):
-        return self.w > other.w
-    def __le__(self, other):
-        return self.w <= other.w
-    def __ge__(self, other):
-        return self.w >= other.w
-
 def dijkstra2(n, edges, s):
+    costs, parents = [math.inf] * n, [-1] * n
     visited = [False] * n
-    costs, parents = [math.inf] * n, [-1 for _ in range(n)]
+    # initialise
     costs[s] = 0
-    visited[s] = True
-    queue, u = [], s
-    for _ in range(n):
+    queue = [(0, -1, s)]
+    #
+    while len(queue) > 0:
+        # extract the nearest vertex u which is not visited
+        (c, p, u) = heapq.heappop(queue)
+        if visited[u]:
+            continue
+        # update values
+        visited[u] = True
+        costs[u] = c
+        parents[u] = p
+        # push neighbouring vertices
         for (v, w) in edges[u]:
             if not visited[v]:
-                heapq.heappush(queue, _PQEdge(u, v, costs[u] + w))
-        def smallest_edge():
-            while len(queue) > 0:
-                x = heapq.heappop(queue)
-                if not visited[x.v]:
-                    return x
-            return None
-        e = smallest_edge()
-        if not e:
-            break
-        u = e.v
-        costs[u] = e.w
-        parents[u] = e.u
-        visited[u] = True
+                heapq.heappush(queue, (costs[u] + w, u, v))
+    # finish when the queue is empty
     return SPT(n, s, costs, parents)
 
 class TestDijkstra(unittest.TestCase):
