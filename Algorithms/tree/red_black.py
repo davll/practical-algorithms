@@ -193,7 +193,7 @@ class RBTree:
                 parent.colour = Colour.BLACK
                 grandparent.colour = Colour.RED
                 node = grandparent
-            else if parent.branch == Branch.LEFT:
+            elif parent.branch == Branch.LEFT:
                 if node.branch == Branch.LEFT:
                     #
                     #        GP(B)            P(B)
@@ -245,6 +245,7 @@ class RBTree:
         assert self.root.is_root
         self.root.colour = Colour.BLACK
     def remove(self, key):
+        pass
 
 # References:
 # https://www.geeksforgeeks.org/red-black-tree-set-1-introduction-2/
