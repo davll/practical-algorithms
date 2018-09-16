@@ -1,3 +1,4 @@
+# find key in arr[start:end] (not including arr[end])
 def binary_search(arr, start, end, key):
     if end > start:
         mid = (start + end - 1) // 2
