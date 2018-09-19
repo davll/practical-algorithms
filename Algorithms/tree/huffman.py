@@ -68,3 +68,6 @@ class HuffmanTree:
 
 # References:
 # https://www.geeksforgeeks.org/huffman-coding-greedy-algo-3/
+
+if __name__ == "__name__":
+    pass

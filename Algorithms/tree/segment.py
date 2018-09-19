@@ -54,3 +54,6 @@ class SegmentTree:
 # References:
 # https://www.geeksforgeeks.org/segment-tree-set-1-sum-of-given-range/
 # https://www.geeksforgeeks.org/segment-tree-set-1-range-minimum-query/
+
+if __name__ == "__main__":
+    pass

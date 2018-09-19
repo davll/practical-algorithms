@@ -4,7 +4,7 @@
 # 2. the key in each node <= any keys in the right sub-tree
 # 3. the leaves contain no key
 
-from bintree import preorder_traverse, inorder_traverse, postorder_traverse, levelorder_traverse
+from bt import preorder_traverse, inorder_traverse, postorder_traverse, levelorder_traverse
 from collections import deque
 
 class BinarySearchTree:
