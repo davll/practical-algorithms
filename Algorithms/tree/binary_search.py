@@ -4,9 +4,21 @@
 # 2. the key in each node <= any keys in the right sub-tree
 # 3. the leaves contain no key
 
+from collections import deque
+
 class BinarySearchTree:
-    def __init__(self):
-        self._root = None
+    #
+    def __init__(self, root = None):
+        assert root is None or _is_bst(root)
+        self._root = root
+    #
+    @classmethod
+    def from_preorder(cls, key_value_pairs):
+        return BinarySearchTree(_from_preorder(key_value_pairs))
+    @classmethod
+    def from_inorder(cls, key_value_pairs):
+        return BinarySearchTree(_from_inorder(key_value_pairs))
+    #
     @property
     def root(self):
         return self._root
@@ -106,5 +118,42 @@ def _postorder_traverse(root, visit):
         _postorder_traverse(root.right, visit)
         visit(root.key, root.value)
 
-def reconstruct_from_preorder(key_value_pairs):
+def _is_bst(root):
+    if root is None:
+        return False
+    def check(t, lo, hi):
+        if t is None:
+            return True
+        if t.key < lo or t.key > hi:
+            return False
+        return check(t.left, lo, t.key) and check(t.right, t.key, hi)
+    def find_min(t):
+        if t.left is None:
+            return t.key
+        else:
+            return find_min(t.left)
+    def find_max(t):
+        if t.right is None:
+            return t.key
+        else:
+            return find_max(t.right)
+    return check(root, find_min(root), find_max(root))
+
+def _from_preorder(key_value_pairs):
+    def build_subtree(kv, lo, hi):
+        if len(kv) == 0:
+            return None
+        (key, value) = kv.popleft()
+        if lo <= key and key <= hi:
+            node = Node(key, value)
+            node.left = build_subtree(kv, lo, key)
+            node.right = build_subtree(kv, key, hi)
+            return node
+        else:
+            kv.pushleft((key, value))
+            return None
+    q = deque(key_value_pairs)
+    return build_subtree(q, min(map(lambda x: x[0], q)), max(map(lambda x: x[0], q)))
+
+def _from_inorder(key_value_pairs):
     raise NotImplementedError()
