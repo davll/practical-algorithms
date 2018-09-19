@@ -4,6 +4,7 @@
 # 2. the key in each node <= any keys in the right sub-tree
 # 3. the leaves contain no key
 
+from bintree import preorder_traverse, inorder_traverse, postorder_traverse, levelorder_traverse
 from collections import deque
 
 class BinarySearchTree:
@@ -38,12 +39,18 @@ class BinarySearchTree:
         self._root = _insert(self._root, key, value)
     def remove(self, key):
         self._root = _remove(self._root, key)
-    def preorder_traverse(self, visit):
-        _preorder_traverse(self._root, visit)
-    def inorder_traverse(self, visit):
-        _inorder_traverse(self._root, visit)
-    def postorder_traverse(self, visit):
-        _postorder_traverse(self._root, visit)
+    def preorder_traverse(self):
+        for node in preorder_traverse(self.root):
+            yield (node.key, node.value)
+    def inorder_traverse(self):
+        for node in inorder_traverse(self.root):
+            yield (node.key, node.value)
+    def postorder_traverse(self):
+        for node in postorder_traverse(self.root):
+            yield (node.key, node.value)
+    def levelorder_traverse(self):
+        for node in levelorder_traverse(self.root):
+            yield (node.key, node.value)
 
 class Node:
     def __init__(self, key, value):
@@ -100,24 +107,6 @@ def _remove(root, key):
         root.right = _remove(tmp.right, tmp.key)
     return root
 
-def _preorder_traverse(root, visit):
-    if root is not None:
-        visit(root.key, root.value)
-        _preorder_traverse(root.left, visit)
-        _preorder_traverse(root.right, visit)
-
-def _inorder_traverse(root, visit):
-    if root is not None:
-        _inorder_traverse(root.left, visit)
-        visit(root.key, root.value)
-        _inorder_traverse(root.right, visit)
-
-def _postorder_traverse(root, visit):
-    if root is not None:
-        _postorder_traverse(root.left, visit)
-        _postorder_traverse(root.right, visit)
-        visit(root.key, root.value)
-
 def _is_bst(root):
     if root is None:
         return False
@@ -150,10 +139,18 @@ def _from_preorder(key_value_pairs):
             node.right = build_subtree(kv, key, hi)
             return node
         else:
-            kv.pushleft((key, value))
+            kv.appendleft((key, value))
             return None
     q = deque(key_value_pairs)
     return build_subtree(q, min(map(lambda x: x[0], q)), max(map(lambda x: x[0], q)))
 
 def _from_inorder(key_value_pairs):
-    raise NotImplementedError()
+    n = len(key_value_pairs)
+
+if __name__ == "__main__":
+    preorder = [(10, 'A'), (5, 'B'), (1, 'C'), (7, 'D'), (40, 'E'), (50, 'F')]
+    bst = BinarySearchTree.from_preorder(preorder)
+    print(str(list(bst.preorder_traverse())))
+    print(str(list(bst.inorder_traverse())))
+    print(str(list(bst.postorder_traverse())))
+    print(str(list(bst.levelorder_traverse())))
