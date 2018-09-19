@@ -1,6 +1,7 @@
 # Trie
 
 from bisect import bisect_right
+from sys import stderr
 
 class Trie:
     def __init__(self):
@@ -14,14 +15,15 @@ class Trie:
         for c in s:
             # find a child with key = c
             i = bisect_right(node.children_keys, c)
-            if node.children_keys[i-1] == c:
+            print("i = %d" % i, file = stderr)
+            if i > 0 and node.children_keys[i-1] == c:
                 # found
                 node = node.children[i-1]
                 assert node.depth == depth
             else: # not found
                 tmp = Node(c, None, depth)
                 node.children.insert(i, tmp)
-                node.children_key.insert(i, tmp)
+                node.children_keys.insert(i, c)
                 node = tmp
             depth += 1
         node.end_of_word = True
@@ -61,7 +63,7 @@ class Trie:
         while len(stk) > 0:
             node = stk[-1]
             if node.end_of_word:
-                yield s[:]
+                yield ''.join(s)
         # TODO: WIP
 
 class Node:
@@ -74,3 +76,14 @@ class Node:
         self.end_of_word = False
     def __repr__(self):
         return str(self.key)
+
+if __name__ == "__main__":
+    t = Trie()
+    t['hello'] = 10
+    t['hen'] = 100
+    t['world'] = -10
+    t['apple'] = 1984
+    print("hello => %d" % t['hello'])
+    print("hen => %d" % t['hen'])
+    print("world => %d" % t['world'])
+    print("apple => %d" % t['apple'])

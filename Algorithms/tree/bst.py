@@ -4,7 +4,6 @@
 # 2. the key in each node <= any keys in the right sub-tree
 # 3. the leaves contain no key
 
-from bt import preorder_traverse, inorder_traverse, postorder_traverse, levelorder_traverse
 from collections import deque
 
 class BinarySearchTree:
@@ -39,17 +38,21 @@ class BinarySearchTree:
         self._root = _insert(self._root, key, value)
     def remove(self, key):
         self._root = _remove(self._root, key)
-    def preorder_traverse(self):
-        for node in preorder_traverse(self.root):
+    def preorder(self):
+        from bt import preorder
+        for node in preorder(self.root):
             yield (node.key, node.value)
-    def inorder_traverse(self):
-        for node in inorder_traverse(self.root):
+    def inorder(self):
+        from bt import inorder
+        for node in inorder(self.root):
             yield (node.key, node.value)
-    def postorder_traverse(self):
-        for node in postorder_traverse(self.root):
+    def postorder(self):
+        from bt import postorder
+        for node in postorder(self.root):
             yield (node.key, node.value)
-    def levelorder_traverse(self):
-        for node in levelorder_traverse(self.root):
+    def levelorder(self):
+        from bt import levelorder
+        for node in levelorder(self.root):
             yield (node.key, node.value)
 
 class Node:
@@ -73,10 +76,10 @@ def _insert(root, key, value):
         return Node(key, value)
     elif key < root.key:
         # recurse down left subtree
-        root.left = _insert(root.left, key)
+        root.left = _insert(root.left, key, value)
     elif key > root.key:
         # recurse down right subtree
-        root.right = _insert(root.right, key)
+        root.right = _insert(root.right, key, value)
     elif key == root.key:
         # update value
         root.value = value
@@ -104,7 +107,7 @@ def _remove(root, key):
         # 2. replace the content of root node
         root.key, root.value = tmp.key, tmp.value
         # 3. delete the inorder successor
-        root.right = _remove(tmp.right, tmp.key)
+        root.right = _remove(root.right, tmp.key)
     return root
 
 def _is_bst(root):
@@ -150,7 +153,11 @@ def _from_inorder(key_value_pairs):
 if __name__ == "__main__":
     preorder = [(10, 'A'), (5, 'B'), (1, 'C'), (7, 'D'), (40, 'E'), (50, 'F')]
     bst = BinarySearchTree.from_preorder(preorder)
-    print(str(list(bst.preorder_traverse())))
-    print(str(list(bst.inorder_traverse())))
-    print(str(list(bst.postorder_traverse())))
-    print(str(list(bst.levelorder_traverse())))
+    print(str(list(bst.preorder())))
+    print(str(list(bst.inorder())))
+    print(str(list(bst.postorder())))
+    print(str(list(bst.levelorder())))
+    bst[6] = 'ABC'
+    print(str(list(bst.inorder())))
+    del bst[10]
+    print(str(list(bst.inorder())))
