@@ -15,7 +15,7 @@ class Trie:
         for c in s:
             # find a child with key = c
             i = bisect_right(node.children_keys, c)
-            print("i = %d" % i, file = stderr)
+            print("c = %s, i = %d" % (c,i), file = stderr)
             if i > 0 and node.children_keys[i-1] == c:
                 # found
                 node = node.children[i-1]
@@ -58,13 +58,17 @@ class Trie:
         self.insert(s, value)
     #
     def items(self):
-        stk = [self.root]
-        s = []
-        while len(stk) > 0:
-            node = stk[-1]
-            if node.end_of_word:
+        def traverse(root, s):
+            if root.key is not None:
+                s.append(root.key)
+            if root.end_of_word:
                 yield ''.join(s)
-        # TODO: WIP
+            for child in root.children:
+                yield from traverse(child, s)
+            if root.key is not None:
+                x = s.pop()
+                assert x == root.key
+        yield from traverse(self.root, [])
 
 class Node:
     def __init__(self, key, value, depth):
@@ -87,3 +91,5 @@ if __name__ == "__main__":
     print("hen => %d" % t['hen'])
     print("world => %d" % t['world'])
     print("apple => %d" % t['apple'])
+    for x in t.items():
+        print(x)
