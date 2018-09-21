@@ -100,6 +100,26 @@ def rotate_right(root):
     l.right = root
     return l
 
+def morris_inorder(root):
+    curr = root
+    while curr is not None:
+        if curr.left is None:
+            yield curr
+            curr = curr.right
+        else:
+            # find the inorder predecessor of curr
+            pre = curr.left
+            while pre.right is not None and pre.right != curr:
+                pre = pre.right
+            # mark current as right child of its inorder predecessor
+            if pre.right is None:
+                pre.right = curr
+                curr = curr.left
+            else: # revert the change
+                pre.right = None
+                yield curr
+                curr = curr.right
+
 # TODO: build from preorder and inorder
 # TODO: build complete binary tree from preorder and postorder
 

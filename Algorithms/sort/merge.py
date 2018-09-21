@@ -15,3 +15,6 @@ def merge(a, b):
     if j < n:
         c[k:] = b[j:]
     return c
+
+if __name__ == "__main__":
+    pass

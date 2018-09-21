@@ -10,3 +10,6 @@ def gcd_sub(a, b):
         else:
             b = b - a
     return a
+
+if __name__ == "__main__":
+    pass

@@ -5,3 +5,6 @@ def bubblesort(a):
         for i in range(n-1):
             if a[i] > a[i+1]:
                 a[i], a[i+1] = a[i+1], a[i]
+
+if __name__ == "__main__":
+    pass

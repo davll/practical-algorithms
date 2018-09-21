@@ -54,3 +54,6 @@ def radixsort(arr):
         arr, tmp = tmp, arr
         exp *= 10
     return arr
+
+if __name__ == "__main__":
+    pass
