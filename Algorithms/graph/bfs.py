@@ -2,11 +2,8 @@
 
 from collections import deque
 
-def bfs(n, edges, start):
-    visited = [False] * n
-    q = deque()
-    # Initialise
-    q.append(start)
+def bfs(n, edges, start, visited):
+    q = deque([start])
     visited[start] = True
     # Iterate
     while len(q) > 0:
