@@ -3,47 +3,29 @@
 # Lemma: After DFS, if it exists a path from vertex A to vertex B,
 #        then finish[A] > finish[B]
 
+from adjlist import Graph
+
 # Legacy DFS algorithm
-def topo_dfs(n, edges):
-    from dfs import dfs_postorder
-    visited = [False] * n
-    stack = []
-    def _dfs(u):
-        assert not visited[u]
-        visited[u] = True
-        for v in edges[u]:
-            if not visited[v]:
-                _dfs(v)
-        # finish time
-        stack.append(u)
-    for s in range(n):
-        if visited[s]:
-            continue
-        stack.extend(dfs_postorder(n, edges, s, visited))
-        #_dfs(s)
-    # order by finish time (from bigger to smaller)
+def topo_dfs(graph):
+    from dfs import dfs, Order
+    stack = list(dfs(graph, order=Order.POST, acyclic=True))
+    # order by finish time (from new to old)
     stack.reverse()
     return stack
 
 # Kahn's algorithm
-def topo_kahn(n, edges):
-    """
-    n: int => number of vertices
-    edges: [[v]] => adjacency list
-    return: []
-    """
+def topo_kahn(graph):
     from collections import deque
-    indegree = [0] * n
-    for v in (v for vs in edges for v in vs):
-        indegree[v] += 1
-    used = [[False] * len(edges[i]) for i in range(0,n)]
+    n = len(graph)
+    indegree = graph.indegrees()
+    used = [[False] * graph.outdegree(i) for i in range(0,n)]
     result = []
-    pendings = deque([i for i in range(0,n) if indegree[i] == 0])
-    while len(pendings) > 0:
-        u = pendings.popleft()
+    q = deque([i for i in range(0,n) if indegree[i] == 0])
+    while len(q) > 0:
+        u = q.popleft()
         result.append(u)
         # for each edge (u -> v)
-        for (i,v) in enumerate(edges[u]):
+        for (i,(v,_)) in enumerate(graph.edges_from(u)):
             if used[u][i]:
                 continue
             assert indegree[v] > 0
@@ -52,7 +34,7 @@ def topo_kahn(n, edges):
             indegree[v] -= 1
             # enqueue the vertex if its in-degree is zero
             if indegree[v] == 0:
-                pendings.append(v)
+                q.append(v)
     if any([not f for us in used for f in us]):
         # the graph has at least a cycle
         return None
@@ -61,25 +43,32 @@ def topo_kahn(n, edges):
         return result
 
 if __name__ == "__main__":
-    n = 15
-    edges = [
-        [2],
-        [2],
-        [6,7],
-        [4],
-        [5],
-        [6,14],
-        [8,9,11,12],
-        [8],
-        [],
-        [10],
-        [],
-        [],
-        [13],
-        [],
-        [],
-    ]
-    result1 = topo_dfs(n, edges)
-    result2 = topo_kahn(n, edges)
+    g = Graph(15)
+    g.add_edge(0, 2)
+    g.add_edge(1, 2)
+    g.add_edge(2, 6)
+    g.add_edge(2, 7)
+    g.add_edge(3, 4)
+    g.add_edge(4, 5)
+    g.add_edge(5, 6)
+    g.add_edge(5, 14)
+    g.add_edge(6, 8)
+    g.add_edge(6, 9)
+    g.add_edge(6, 11)
+    g.add_edge(6, 12)
+    g.add_edge(7, 8)
+    g.add_edge(9, 10)
+    g.add_edge(12, 13)
+    #g.add_edge(12, 0)
+    def check_result(ans):
+        n = len(g)
+        for u in range(n):
+            u_idx = ans.index(u)
+            for (v,_) in g.edges_from(u):
+                assert u_idx < ans.index(v)
+    result1 = topo_dfs(g)
+    result2 = topo_kahn(g)
     print(str(result1))
     print(str(result2))
+    check_result(result1)
+    check_result(result2)
