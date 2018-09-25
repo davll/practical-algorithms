@@ -1,6 +1,10 @@
 # Binary Indexed Tree (aka Fenwick Tree)
 
 #
+# =======================================
+#
+# 1D Binary Index Tree
+#
 #
 #
 #
@@ -34,6 +38,12 @@ def bit_update(bit, n, i, val):
         bit[i] += val
         # move index to parent node in update view
         i += i & (-i)
+
+#
+# =======================================
+#
+# 2D Binary Index Tree
+#
 
 def bit2d_zeros(m, n):
     return [[0] * (n+1) for _ in range(m+1)]
