@@ -41,14 +41,14 @@ class HuffmanTree:
         table = {}
         def traverse(node, c):
             if node.left:
-                traverse(node.left, c + '0')
+                traverse(node.left, (c << 1))
             if node.right:
-                traverse(node.right, c + '1')
+                traverse(node.right, ((c << 1) | 1))
             if node.key != None:
                 assert node.left == None
                 assert node.right == None
                 table[node.key] = c
-        traverse(self.root, '')
+        traverse(self.root, 0)
         return table
     #
     def decode(self, s):

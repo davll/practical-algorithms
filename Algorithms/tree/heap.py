@@ -47,3 +47,6 @@ def heap_pop(h):
     h[0], h[-1] = h[-1], h[0]
     heapify(h, len(h)-1, 0)
     return h.pop()
+
+if __name__ == "__main__":
+    pass

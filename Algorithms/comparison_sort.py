@@ -54,24 +54,44 @@ def mergesort(a):
     def _mergesort(arr):
         if not arr:
             return []
+        if len(arr) == 1:
+            return arr
         mid = len(arr) // 2
         xs = _mergesort(arr[:mid])
         ys = _mergesort(arr[mid:])
         return list(_merge(xs, ys))
     return _mergesort(a)
 
-def test():
-    arr = [3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48]
-    exp = list(sorted(arr))
-    ans1 = bubblesort(arr[:])
-    ans2 = selectionsort(arr[:])
-    ans3 = insertionsort(arr[:])
-    ans4 = heapsort(arr[:])
-    #ans5 = mergesort(arr)
-    assert exp == ans1
-    assert exp == ans2
-    assert exp == ans3
-    assert exp == ans4
-
 if __name__ == "__main__":
-    test()
+    import unittest
+    class TestBubbleSort(unittest.TestCase):
+        def test1(self):
+            arr = [3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48]
+            exp = list(sorted(arr))
+            bubblesort(arr)
+            self.assertListEqual(arr, exp)
+    class TestInsertionSort(unittest.TestCase):
+        def test1(self):
+            arr = [3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48]
+            exp = list(sorted(arr))
+            insertionsort(arr)
+            self.assertListEqual(arr, exp)
+    class TestSelectionSort(unittest.TestCase):
+        def test1(self):
+            arr = [3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48]
+            exp = list(sorted(arr))
+            selectionsort(arr)
+            self.assertListEqual(arr, exp)
+    class TestHeapSort(unittest.TestCase):
+        def test1(self):
+            arr = [3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48]
+            exp = list(sorted(arr))
+            heapsort(arr)
+            self.assertListEqual(arr, exp)
+    class TestMergeSort(unittest.TestCase):
+        def test1(self):
+            arr = [3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48]
+            exp = list(sorted(arr))
+            b = mergesort(arr)
+            self.assertListEqual(b, exp)
+    unittest.main()
