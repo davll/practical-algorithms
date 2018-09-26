@@ -20,6 +20,9 @@ class UnionFind:
             k += 1
         return k
     #
+    def size(self, p):
+        return self._sz[self.find(p)]
+    #
     def connected(self, p, q):
         return self.find(p) == self.find(q)
     # 
