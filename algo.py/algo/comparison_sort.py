@@ -31,7 +31,7 @@ def insertionsort(a):
 
 # T = O(n*log(n))
 def heapsort(a):
-    from tree.heap import heapify, heap_init
+    from algo.tree.heap import heapify, heap_init
     heap_init(a)
     for k in range(len(a)-1, -1, -1):
         a[0], a[k] = a[k], a[0]
@@ -61,37 +61,3 @@ def mergesort(a):
         ys = _mergesort(arr[mid:])
         return list(_merge(xs, ys))
     return _mergesort(a)
-
-if __name__ == "__main__":
-    import unittest
-    class TestBubbleSort(unittest.TestCase):
-        def test1(self):
-            arr = [3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48]
-            exp = list(sorted(arr))
-            bubblesort(arr)
-            self.assertListEqual(arr, exp)
-    class TestInsertionSort(unittest.TestCase):
-        def test1(self):
-            arr = [3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48]
-            exp = list(sorted(arr))
-            insertionsort(arr)
-            self.assertListEqual(arr, exp)
-    class TestSelectionSort(unittest.TestCase):
-        def test1(self):
-            arr = [3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48]
-            exp = list(sorted(arr))
-            selectionsort(arr)
-            self.assertListEqual(arr, exp)
-    class TestHeapSort(unittest.TestCase):
-        def test1(self):
-            arr = [3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48]
-            exp = list(sorted(arr))
-            heapsort(arr)
-            self.assertListEqual(arr, exp)
-    class TestMergeSort(unittest.TestCase):
-        def test1(self):
-            arr = [3, 44, 38, 5, 47, 15, 36, 26, 27, 2, 46, 4, 19, 50, 48]
-            exp = list(sorted(arr))
-            b = mergesort(arr)
-            self.assertListEqual(b, exp)
-    unittest.main()

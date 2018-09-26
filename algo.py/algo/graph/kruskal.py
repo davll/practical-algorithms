@@ -1,33 +1,36 @@
 from union_find import UnionFind
+from adjlist import UGraph
 
 class MST:
     """Minimum Spanning Tree
 
     Attributes:
-        n (int): number of vertices
-        w (T): weight of the MST
-        edges [(int, int, T)]: edges of the MST
+        size (int): number of vertices
+        weight (T): weight of the MST
+        edges [Edge(int, int, T)]: edges of the MST
 
     """
     #
     def __init__(self, n, w, edges):
-        self.n = n
-        self.w = w
+        self.size = n
+        self.weight = w
         self.edges = edges
 
-def mst_kruskal(n, edges):
-    """Find a minimum spanning tree from an undirected graph
+def mst_kruskal(graph):
+    """Find a minimum spanning tree from a graph
 
     Args:
-        n (int): number of vertices
-        edges ([(int, int, T)]): list of edges, each edge is composed of (u, v, w)
+        graph (UGraph): undirected graph
     
     Returns:
         MST: a minimum spanning tree
 
     """
+    # prepare data
+    n, edges = len(graph), list(graph.edges)
+    edges.sort(key=lambda x: x.w)
+    #
     mst, cost = [], 0
-    edges.sort(key = lambda x: x[2])
     group = UnionFind(n)
     for (u, v, w) in edges:
         if group.find(u) != group.find(v):
