@@ -5,39 +5,56 @@
 #
 # 1D Binary Index Tree
 #
+# Update view:
 #
+#          ------x     --x   x x
+#         /   / /     / /   /
+#      --x   x x     x x   x
+#     / /   /       /
+#    x x   x       x
+#   /
+#  x
 #
+#  1 2 3 4 5 6 7 8 9 A B C D E F
 #
+# Sum view:
+#
+#  
+#
+#  1 2 3 4 5 6 7 8 9 A B C D E F
+#
+# https://visualgo.net/bn/fenwicktree
 
-def bit_zeros(n):
-    return [0] * (n+1)
-
-def bit_init(n, arr = []):
-    bit = bit_zeros()
+def ft_init(n, arr = []):
+    assert n >= len(arr)
+    ft = [0] * n
     for (i, a) in enumerate(arr):
-        fenwick_update(bit, n, i, a)
+        ft_update(bit, n, i, a)
     return bit
 
+def _lsb(x):
+    return x & (-x)
+
 # returns sum of A[0:i]
-def bit_sum(bit, i):
+def ft_sum(ft, i):
     result = 0
     # traverse ancestors
     while i > 0:
         # add current element to result
-        result += bit[i]
+        result += ft[i-1]
         # move index to parent node in sum view
-        i -= i & (-i)
+        i -= _lsb(i)
     return result
 
 # update A[i]
-def bit_update(bit, n, i, val):
+def ft_update(ft, n, i, val):
     i = i + 1
     # traverse all ancestors
     while i <= n:
         # add val to current node
-        bit[i] += val
+        ft[i-1] += val
         # move index to parent node in update view
-        i += i & (-i)
+        i += _lsb(i)
 
 #
 # =======================================
