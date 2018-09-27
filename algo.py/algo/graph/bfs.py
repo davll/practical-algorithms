@@ -2,17 +2,27 @@
 
 from collections import deque
 
-def bfs(n, edges, start, visited):
-    q = deque([start])
-    visited[start] = True
+def bfs_visit(s, graph, visited):
+    assert not visited[s]
+    q = deque([s])
+    visited[s] = True
     # Iterate
     while len(q) > 0:
         u = q.popleft()
         yield u
-        for v in edges[u]:
+        for (v,_) in graph.edges_from(u):
             if not visited[v]:
                 q.append(v)
                 visited[v] = True
 
-if __name__ == "__main__":
-    pass
+def bfs(graph, source = None):
+    n = len(graph)
+    visited = [False] * n
+    if source:
+        source = iter(source)
+    else:
+        source = range(0, n)
+    for s in source:
+        if visited[s]:
+            continue
+        yield from bfs_visit(s, graph, visited)

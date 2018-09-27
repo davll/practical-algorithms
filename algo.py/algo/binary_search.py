@@ -14,6 +14,3 @@ def binary_search(arr, start, end, key):
 # References:
 # Python: bisect in standard library
 # https://ai.googleblog.com/2006/06/extra-extra-read-all-about-it-nearly.html
-
-if __name__ == "__main__":
-    pass

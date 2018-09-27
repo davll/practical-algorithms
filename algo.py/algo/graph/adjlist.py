@@ -64,6 +64,3 @@ class UGraph:
     #
     def edges(self):
         return (e for e in self._edges)
-
-if __name__ == "__main__":
-    pass

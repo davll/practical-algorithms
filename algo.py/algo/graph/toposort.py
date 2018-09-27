@@ -3,18 +3,16 @@
 # Lemma: After DFS, if it exists a path from vertex A to vertex B,
 #        then finish[A] > finish[B]
 
-from adjlist import Graph
-
 # Legacy DFS algorithm
-def topo_dfs(graph):
-    from dfs import dfs, Order
-    stack = list(dfs(graph, order=Order.POST, acyclic=True))
+def toposort_dfs(graph):
+    from algo.graph.dfs import dfs
+    stack = list(dfs(graph, postorder=True))
     # order by finish time (from new to old)
     stack.reverse()
     return stack
 
 # Kahn's algorithm
-def topo_kahn(graph):
+def toposort_kahn(graph):
     from collections import deque
     n = len(graph)
     indegree = graph.indegrees()
@@ -41,34 +39,3 @@ def topo_kahn(graph):
     else:
         # a topologically sorted vertices
         return result
-
-if __name__ == "__main__":
-    g = Graph(15)
-    g.add_edge(0, 2)
-    g.add_edge(1, 2)
-    g.add_edge(2, 6)
-    g.add_edge(2, 7)
-    g.add_edge(3, 4)
-    g.add_edge(4, 5)
-    g.add_edge(5, 6)
-    g.add_edge(5, 14)
-    g.add_edge(6, 8)
-    g.add_edge(6, 9)
-    g.add_edge(6, 11)
-    g.add_edge(6, 12)
-    g.add_edge(7, 8)
-    g.add_edge(9, 10)
-    g.add_edge(12, 13)
-    #g.add_edge(12, 0)
-    def check_result(ans):
-        n = len(g)
-        for u in range(n):
-            u_idx = ans.index(u)
-            for (v,_) in g.edges_from(u):
-                assert u_idx < ans.index(v)
-    result1 = topo_dfs(g)
-    result2 = topo_kahn(g)
-    print(str(result1))
-    print(str(result2))
-    check_result(result1)
-    check_result(result2)

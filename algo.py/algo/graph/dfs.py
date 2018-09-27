@@ -1,39 +1,29 @@
 # Depth-First Search
 
-from adjlist import Graph
-from enum import Enum
+def dfs_visit_preorder(u, graph, visited):
+    assert not visited[u]
+    # visit and mark vertex u
+    yield u
+    visited[u] = True
+    # visit neighbours
+    for (v,_) in graph.edges_from(u):
+        if not visited[v]:
+            yield from dfs_visit_preorder(v, graph, visited)
 
-class Order(Enum):
-    PRE = 1
-    POST = 2
+def dfs_visit_postorder(u, graph, visited):
+    assert not visited[u]
+    # mark vertex u
+    visited[u] = True
+    # visit neighbours
+    for (v,_) in graph.edges_from(u):
+        if not visited[v]:
+            yield from dfs_visit_postorder(v, graph, visited)
+    # visit vertex u
+    yield u
 
-class UnexpectedCycleError(Exception):
-    pass
-
-def dfs(graph, order = Order.PRE, acyclic = False, source = None):
-    order = Order(order)
+def dfs(graph, postorder = False, source = None):
     n = len(graph)
     visited = [False] * n
-    if acyclic:
-        intree = [False] * n
-    def _dfs_visit(u):
-        assert not visited[u]
-        if acyclic:
-            assert not intree[u]
-        if order == Order.PRE:
-            yield u
-        visited[u] = True
-        if acyclic:
-            intree[u] = True
-        for (v,_) in graph.edges_from(u):
-            if not visited[v]:
-                yield from _dfs_visit(v)
-            elif acyclic and intree[v]:
-                raise UnexpectedCycleError()
-        if acyclic:
-            intree[u] = False
-        if order == Order.POST:
-            yield u
     if source:
         source = iter(source)
     else:
@@ -41,7 +31,34 @@ def dfs(graph, order = Order.PRE, acyclic = False, source = None):
     for s in source:
         if visited[s]:
             continue
-        yield from _dfs_visit(s)
+        if postorder:
+            yield from dfs_visit_postorder(s, graph, visited)
+        else:
+            yield from dfs_visit_preorder(s, graph, visited)
+
+def detect_cycle(graph):
+    n = len(graph)
+    visited = [False] * n
+    intree = [False] * n
+    def _dfs_visit(u):
+        assert not visited[u]
+        assert not intree[u]
+        visited[u] = True
+        intree[u] = True
+        for (v,_) in graph.edges_from(u):
+            if not visited[v]:
+                if _dfs_visit(v):
+                    return True
+            elif intree[v]:
+                return True
+        intree[u] = False
+        return False
+    for s in range(0, n):
+        if visited[s]:
+            continue
+        if _dfs_visit(s):
+            return True
+    return False
 
 def dfs_i(n, edges, start, visited):
     stack = [start]
@@ -58,22 +75,3 @@ def dfs_i(n, edges, start, visited):
 
 # http://alrightchiu.github.io/SecondRound/graph-depth-first-searchdfsshen-du-you-xian-sou-xun.html
 # https://www.geeksforgeeks.org/detect-cycle-in-a-graph/
-
-if __name__ == "__main__":
-    g = Graph(9)
-    g.add_edge(0, 1)
-    g.add_edge(1, 2)
-    g.add_edge(1, 4)
-    g.add_edge(2, 0)
-    g.add_edge(2, 3)
-    g.add_edge(2, 5)
-    g.add_edge(3, 2)
-    g.add_edge(4, 5)
-    g.add_edge(4, 6)
-    g.add_edge(5, 4)
-    g.add_edge(5, 6)
-    g.add_edge(5, 7)
-    g.add_edge(6, 7)
-    g.add_edge(7, 8)
-    g.add_edge(8, 6)
-    print(str(list(dfs(g, source = reversed(range(9))))))

@@ -1,5 +1,5 @@
-from union_find import UnionFind
-from adjlist import UGraph
+from algo.union_find import UnionFind
+from algo.graph.adjlist import UGraph
 
 class MST:
     """Minimum Spanning Tree
@@ -27,7 +27,7 @@ def mst_kruskal(graph):
 
     """
     # prepare data
-    n, edges = len(graph), list(graph.edges)
+    n, edges = len(graph), list(graph.edges())
     edges.sort(key=lambda x: x.w)
     #
     mst, cost = [], 0

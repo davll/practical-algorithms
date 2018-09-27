@@ -86,6 +86,3 @@ def kth_v3(l1, l2, k):
         else:
             return _bs(l1, l2, (s1+i, t1), (s2, t2), k-i)
     return _bs(l1, l2, (0, len(l1)), (0, len(l2)), k+1)
-
-if __name__ == "__main__":
-    pass
