@@ -1,5 +1,5 @@
 from unittest import TestCase
-from algo.tree.heap import *
+from ..heap import heap_init, heapify, heap_pop
 from sys import stderr
 
 def _arr1():

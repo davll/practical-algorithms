@@ -1,5 +1,5 @@
 import unittest
-from algo.union_find import UnionFind
+from algo.data.union_find import UnionFind
 
 class TestUnionFind(unittest.TestCase):
     def test_init(self):

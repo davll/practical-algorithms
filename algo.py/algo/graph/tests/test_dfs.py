@@ -1,5 +1,5 @@
 from unittest import TestCase
-from algo.graph.adjlist import Graph
+from algo.data.graph.adjlist import Graph
 from algo.graph.dfs import dfs, detect_cycle
 from sys import stderr
 

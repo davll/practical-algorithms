@@ -1,5 +1,5 @@
 import unittest
-from algo.tree.fenwick_tree import *
+from ..fenwick_tree import ft_init, ft_query, ft_update
 
 class TestFenwick1D(unittest.TestCase):
     def test_4_init(self):

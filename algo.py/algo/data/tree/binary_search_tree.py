@@ -39,19 +39,19 @@ class BinarySearchTree:
     def remove(self, key):
         self._root = _remove(self._root, key)
     def preorder(self):
-        from binary_tree import preorder
+        from .binary_tree import preorder
         for node in preorder(self.root):
             yield (node.key, node.value)
     def inorder(self):
-        from binary_tree import inorder
+        from .binary_tree import inorder
         for node in inorder(self.root):
             yield (node.key, node.value)
     def postorder(self):
-        from binary_tree import postorder
+        from .binary_tree import postorder
         for node in postorder(self.root):
             yield (node.key, node.value)
     def levelorder(self):
-        from binary_tree import levelorder
+        from .binary_tree import levelorder
         for node in levelorder(self.root):
             yield (node.key, node.value)
 
