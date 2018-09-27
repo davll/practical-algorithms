@@ -1,4 +1,11 @@
-# T = O(n^2)
+# Shell Sort
+#
+# Worst case: O(n^2) worst known gap seq., O(n*log(n)) best known gap seq.
+# Avg case: depends on gap sequence
+# Best case: O(n*log(n))
+# Worst case space: O(1) aux
+#
+
 def shellsort(arr, gaps = None):
     n = len(arr)
     if gaps:

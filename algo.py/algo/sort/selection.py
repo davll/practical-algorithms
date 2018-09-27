@@ -1,4 +1,11 @@
-# T = O(n^2)
+# Selection Sort
+#
+# Worst case: O(n^2) comparisons, O(n) swaps
+# Avg case: O(n^2) comparisons, O(n) swaps
+# Best case: O(n^2) comparisons, O(n) swaps
+# Worst case space: O(1) aux
+#
+
 def selectionsort(a):
     n = len(a)
     for i in range(n-1):

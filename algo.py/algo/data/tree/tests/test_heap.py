@@ -1,5 +1,5 @@
 from unittest import TestCase
-from ..heap import heap_init, heapify, heap_pop
+from ..heap import heap_init, heap_push, heap_pop
 from sys import stderr
 
 def _arr1():
@@ -11,11 +11,10 @@ class TestHeap(TestCase):
         heap_init(h)
         #print(str(h), file=stderr)
         self._check_heap(h)
-    def test_insert(self):
+    def test_push(self):
         h = _arr1()
         heap_init(h)
-        h.append(50)
-        heapify(h, len(h), len(h)-1)
+        heap_push(h, 50)
         self._check_heap(h)
     def test_pop(self):
         h = _arr1()

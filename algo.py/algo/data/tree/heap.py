@@ -48,5 +48,7 @@ def heap_pop(h):
     heapify(h, len(h)-1, 0)
     return h.pop()
 
-if __name__ == "__main__":
-    pass
+# T = O(log(n))
+def heap_push(h, x):
+    h.append(x)
+    heapify(h, len(h), len(h)-1)

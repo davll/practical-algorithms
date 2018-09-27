@@ -1,4 +1,11 @@
-# T = O(n^2)
+# Bubble Sort
+#
+# Worst case: O(n^2) comparisons, O(n^2) swaps
+# Avg case: O(n^2) comparisons, O(n^2) swaps
+# Best case: O(n) comparisons, O(1) swaps
+# Worst case space: O(1) auxiliary
+#
+
 def bubblesort(a):
     n = len(a)
     for _ in range(n):

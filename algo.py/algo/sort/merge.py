@@ -1,4 +1,11 @@
-# T = O(n*log(n))
+# Merge Sort
+#
+# Worst case: O(n*log(n))
+# Avg case: O(n*log(n))
+# Best case: O(n*log(n)) typical, O(n) natural variant
+# Worst case space: O(n) aux; O(1) aux for linked lists
+#
+
 def mergesort(a):
     return _mergesort(a)
 

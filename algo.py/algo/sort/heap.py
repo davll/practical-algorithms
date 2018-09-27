@@ -1,3 +1,11 @@
+# Heap Sort
+#
+# Worst case: O(n*log(n))
+# Avg case: O(n*log(n))
+# Best case: O(n*log(n)) distinct keys, O(n) equal keys
+# Worst case space: O(1) aux
+#
+
 from algo.data.tree.heap import heapify, heap_init
 
 # T = O(n*log(n))
