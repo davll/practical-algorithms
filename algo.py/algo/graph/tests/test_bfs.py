@@ -1,5 +1,5 @@
 from unittest import TestCase
-from algo.data.graph.adjlist import Graph
+from algo.data.graph import Graph
 from algo.graph.bfs import bfs
 from sys import stderr
 
