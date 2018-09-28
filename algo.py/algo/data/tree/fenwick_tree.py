@@ -37,22 +37,26 @@
 #
 # https://visualgo.net/bn/fenwicktree
 
-def ft_zeros(n):
+from typing import TypeVar, List
+
+T = TypeVar('T', int, float)
+
+def ft_zeros(n: int) -> List[T]:
     return [0] * n
 
-def ft_init(arr = []):
-    ft = ft_zeros(len(arr))
+def ft_init(arr: List[T]) -> List[T]:
+    ft: List[T] = ft_zeros(len(arr))
     for (i, a) in enumerate(arr):
         ft_update(ft, i, a)
     return ft
 
-def _lsb(x):
+def _lsb(x: int) -> int:
     return x & (-x)
 
 # returns sum of A[0:i+1]
-def ft_query(ft, i):
+def ft_query(ft: List[T], i: int) -> T:
     i = i+1
-    result = 0
+    result: T = 0
     # traverse ancestors
     while i > 0:
         # add current element to result
@@ -62,7 +66,7 @@ def ft_query(ft, i):
     return result
 
 # update A[i]
-def ft_update(ft, i, val):
+def ft_update(ft: List[T], i: int, val: T) -> None:
     n, i = len(ft), i+1
     # traverse all ancestors
     while i <= n:

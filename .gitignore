@@ -8,3 +8,4 @@ __pycache__
 *.hi
 *.o
 *.exe
+.mypy_cache

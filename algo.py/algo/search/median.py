@@ -1,13 +1,16 @@
 # Median Heap for Running Median (Online Algorithm)
 
+from typing import TypeVar, Generic, List
 from algo.data.tree.heap import min_heap_push, max_heap_push, min_heap_pop, max_heap_pop, heap_peak
 
-class MedianHeap:
-    def __init__(self):
-        self.left = []
-        self.right = []
+T = TypeVar('T', int, float)
+
+class MedianHeap(Generic[T]):
+    def __init__(self) -> None:
+        self.left: List[T] = []
+        self.right: List[T] = []
     #
-    def query(self):
+    def query(self) -> float:
         nl, nr = len(self.left), len(self.right)
         if nl == 0 and nr == 0:
             raise IndexError()
@@ -20,7 +23,7 @@ class MedianHeap:
             mr = heap_peak(self.right)
             return (ml + mr) / 2
     #
-    def insert(self, x):
+    def insert(self, x: T) -> None:
         if not self.left and not self.right:
             max_heap_push(self.left, x)
         elif x <= heap_peak(self.left):
