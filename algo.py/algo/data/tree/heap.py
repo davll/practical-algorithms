@@ -6,13 +6,13 @@
 # - its parent is located at k/2 index
 # - and its parent is larger than or equal to it
 
-from typing import TypeVar, Generic, List, Sequence, Callable
+from typing import TypeVar, Generic, MutableSequence, Callable
 import operator as op
 
 T = TypeVar('T')
 
 # T = O(log(n))
-def heapify(h: List[T], n: int, i: int, lt: Callable[[T,T],bool] = op.lt) -> None:
+def heapify(h: MutableSequence[T], n: int, i: int, lt: Callable[[T,T],bool] = op.lt) -> None:
     """Heapify the array in place
     """
     # upward
@@ -38,45 +38,45 @@ def heapify(h: List[T], n: int, i: int, lt: Callable[[T,T],bool] = op.lt) -> Non
         else:
             return
 
-def max_heapify(h: List[T], n: int, i: int) -> None:
+def max_heapify(h: MutableSequence[T], n: int, i: int) -> None:
     heapify(h, n, i, lt=op.lt)
 
-def min_heapify(h: List[T], n: int, i: int) -> None:
+def min_heapify(h: MutableSequence[T], n: int, i: int) -> None:
     heapify(h, n, i, lt=op.gt)
 
 # T = O(1)
-def heap_peak(h: List[T]) -> T:
+def heap_peak(h: MutableSequence[T]) -> T:
     return h[0]
 
 # T = O(n)
-def max_heap_init(a: List[T]) -> None:
+def max_heap_init(a: MutableSequence[T]) -> None:
     for i in range(1, len(a)+1):
         max_heapify(a, i, i-1)
 
 # T = O(log(n))
-def max_heap_pop(h: List[T]) -> T:
+def max_heap_pop(h: MutableSequence[T]) -> T:
     h[0], h[-1] = h[-1], h[0]
     max_heapify(h, len(h)-1, 0)
     return h.pop()
 
 # T = O(log(n))
-def max_heap_push(h: List[T], x: T) -> None:
+def max_heap_push(h: MutableSequence[T], x: T) -> None:
     h.append(x)
     max_heapify(h, len(h), len(h)-1)
 
 # T = O(n)
-def min_heap_init(a: List[T]) -> None:
+def min_heap_init(a: MutableSequence[T]) -> None:
     for i in range(1, len(a)+1):
         min_heapify(a, i, i-1)
 
 # T = O(log(n))
-def min_heap_pop(h: List[T]) -> T:
+def min_heap_pop(h: MutableSequence[T]) -> T:
     h[0], h[-1] = h[-1], h[0]
     min_heapify(h, len(h)-1, 0)
     return h.pop()
 
 # T = O(log(n))
-def min_heap_push(h: List[T], x: T) -> None:
+def min_heap_push(h: MutableSequence[T], x: T) -> None:
     h.append(x)
     min_heapify(h, len(h), len(h)-1)
 

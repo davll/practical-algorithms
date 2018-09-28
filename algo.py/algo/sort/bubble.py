@@ -6,10 +6,13 @@
 # Worst case space: O(1) auxiliary
 #
 
-def bubblesort(a):
+from typing import TypeVar, MutableSequence
+
+T = TypeVar('T', int, float)
+
+def bubblesort(a: MutableSequence[T]) -> None:
     n = len(a)
     for _ in range(n):
         for i in range(n-1):
             if a[i] > a[i+1]:
                 a[i], a[i+1] = a[i+1], a[i]
-    return a

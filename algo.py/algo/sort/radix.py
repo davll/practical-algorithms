@@ -1,5 +1,7 @@
+from typing import TypeVar, List
+
 # T = O(nw)
-def radixsort(arr):
+def radixsort(arr: List[int]) -> List[int]:
     n, maxval = len(arr), max(arr)
     tmp = [0] * n
     count = [0] * 10

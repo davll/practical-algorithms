@@ -6,10 +6,14 @@
 # Worst case space: O(n) aux; O(1) aux for linked lists
 #
 
-def mergesort(a):
+from typing import TypeVar, List, Iterator
+
+T = TypeVar('T', int, float)
+
+def mergesort(a: List[T]) -> List[T]:
     return _mergesort(a)
 
-def _merge(xs, ys):
+def _merge(xs: List[T], ys: List[T]) -> Iterator[T]:
     i, j, xn, yn = 0, 0, len(xs), len(ys)
     while i < xn and j < yn:
         if xs[i] < ys[j]:
@@ -21,7 +25,7 @@ def _merge(xs, ys):
     yield from iter(xs[i:])
     yield from iter(ys[j:])
 
-def _mergesort(arr):
+def _mergesort(arr: List[T]) -> List[T]:
     if not arr:
         return []
     if len(arr) == 1:

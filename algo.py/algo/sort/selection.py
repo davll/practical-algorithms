@@ -6,10 +6,13 @@
 # Worst case space: O(1) aux
 #
 
-def selectionsort(a):
+from typing import TypeVar, MutableSequence
+
+T = TypeVar('T', int, float)
+
+def selectionsort(a: MutableSequence[T]) -> None:
     n = len(a)
     for i in range(n-1):
         j = min(range(i, n),  key=lambda j: a[j])
         if i != j:
             a[i], a[j] = a[j], a[i]
-    return a
