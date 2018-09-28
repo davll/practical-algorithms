@@ -6,49 +6,80 @@
 # - its parent is located at k/2 index
 # - and its parent is larger than or equal to it
 
+from typing import TypeVar, Generic, List, Sequence, Callable
+import operator as op
+
+T = TypeVar('T')
+
 # T = O(log(n))
-def heapify(h, n, i):
-    tmp = i
+def heapify(h: List[T], n: int, i: int, lt: Callable[[T,T],bool] = op.lt) -> None:
+    """Heapify the array in place
+    """
     # upward
     while i > 0:
-        p = (i+1) // 2 - 1 # parent
-        if h[p] < h[i]:
+        p = (i - 1) // 2 # parent
+        if lt(h[p], h[i]):
             h[p], h[i] = h[i], h[p]
             i = p
         else:
-            break
+            return
     # downward
-    i = tmp
     while i < n:
         l = i * 2 + 1 # left child
         r = i * 2 + 2 # right child
         maxi = i
-        if l < n and h[l] > h[maxi]:
+        if l < n and lt(h[maxi], h[l]):
             maxi = l
-        if r < n and h[r] > h[maxi]:
+        if r < n and lt(h[maxi], h[r]):
             maxi = r
         if maxi != i:
             h[i], h[maxi] = h[maxi], h[i]
             i = maxi
         else:
-            break
+            return
+
+def max_heapify(h: List[T], n: int, i: int) -> None:
+    heapify(h, n, i, lt=op.lt)
+
+def min_heapify(h: List[T], n: int, i: int) -> None:
+    heapify(h, n, i, lt=op.gt)
+
+# T = O(1)
+def heap_peak(h: List[T]) -> T:
+    return h[0]
 
 # T = O(n)
-def heap_init(a):
-    """
-    Heapify the input array in place
-    a: [T]
-    """
+def max_heap_init(a: List[T]) -> None:
     for i in range(1, len(a)+1):
-        heapify(a, i, i-1)
+        max_heapify(a, i, i-1)
 
 # T = O(log(n))
-def heap_pop(h):
+def max_heap_pop(h: List[T]) -> T:
     h[0], h[-1] = h[-1], h[0]
-    heapify(h, len(h)-1, 0)
+    max_heapify(h, len(h)-1, 0)
     return h.pop()
 
 # T = O(log(n))
-def heap_push(h, x):
+def max_heap_push(h: List[T], x: T) -> None:
     h.append(x)
-    heapify(h, len(h), len(h)-1)
+    max_heapify(h, len(h), len(h)-1)
+
+# T = O(n)
+def min_heap_init(a: List[T]) -> None:
+    for i in range(1, len(a)+1):
+        min_heapify(a, i, i-1)
+
+# T = O(log(n))
+def min_heap_pop(h: List[T]) -> T:
+    h[0], h[-1] = h[-1], h[0]
+    min_heapify(h, len(h)-1, 0)
+    return h.pop()
+
+# T = O(log(n))
+def min_heap_push(h: List[T], x: T) -> None:
+    h.append(x)
+    min_heapify(h, len(h), len(h)-1)
+
+heap_init = max_heap_init
+heap_pop = max_heap_pop
+heap_push = max_heap_push
