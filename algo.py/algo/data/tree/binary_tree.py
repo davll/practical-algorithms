@@ -100,6 +100,13 @@ def bt_rotate_right(root):
     l.right = root
     return l
 
+def bt_inverse(root):
+    if root is None:
+        return None
+    l, r = root.left, root.right
+    root.left, root.right = bt_inverse(r), bt_inverse(l)
+    return root
+
 def bt_morris_inorder(root):
     curr = root
     while curr is not None:

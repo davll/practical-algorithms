@@ -1,4 +1,4 @@
-class TwoThreeTree:
+class Tree23:
     def __init__(self):
         self._root = None
     #

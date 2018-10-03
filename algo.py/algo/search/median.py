@@ -31,7 +31,7 @@ class MedianHeap(Generic[T]):
             if len(self.left) > len(self.right) + 1:
                 x = max_heap_pop(self.left)
                 min_heap_push(self.right, x)
-        elif x >= heap_peak(self.right):
+        elif not self.right or x >= heap_peak(self.right):
             min_heap_push(self.right, x)
             if len(self.left) + 1 < len(self.right):
                 x = min_heap_pop(self.right)
@@ -40,5 +40,6 @@ class MedianHeap(Generic[T]):
             max_heap_push(self.left, x)
         else:
             min_heap_push(self.right, x)
+        assert abs(len(self.left) - len(self.right)) <= 1
 
 # https://www.geeksforgeeks.org/median-of-stream-of-integers-running-integers/
