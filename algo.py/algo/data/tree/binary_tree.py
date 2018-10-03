@@ -32,33 +32,33 @@
 from collections import deque
 
 class Node:
-    def __init__(self, value):
-        self.value = value
+    def __init__(self, key):
+        self.key = key
         self.left = None
         self.right = None
 
-def preorder(root):
+def bt_preorder(root):
     if root is None:
         return
     yield root
-    yield from preorder(root.left)
-    yield from preorder(root.right)
+    yield from bt_preorder(root.left)
+    yield from bt_preorder(root.right)
 
-def inorder(root):
+def bt_inorder(root):
     if root is None:
         return
-    yield from inorder(root.left)
+    yield from bt_inorder(root.left)
     yield root
-    yield from inorder(root.right)
+    yield from bt_inorder(root.right)
 
-def postorder(root):
+def bt_postorder(root):
     if root is None:
         return
-    yield from postorder(root.left)
-    yield from postorder(root.right)
+    yield from bt_postorder(root.left)
+    yield from bt_postorder(root.right)
     yield root
 
-def levelorder(root):
+def bt_levelorder(root):
     q = deque([root])
     while len(q) > 0:
         node = q.popleft()
@@ -75,7 +75,7 @@ def levelorder(root):
 #        / \       / \
 #       B   C     A   B
 #
-def rotate_left(root):
+def bt_rotate_left(root):
     assert root is not None
     assert root.right is not None
     r = root.right
@@ -91,7 +91,7 @@ def rotate_left(root):
 #   / \               /   \
 #  A   B             B     C
 #
-def rotate_right(root):
+def bt_rotate_right(root):
     assert root is not None
     assert root.left is not None
     l = root.left
@@ -100,7 +100,7 @@ def rotate_right(root):
     l.right = root
     return l
 
-def morris_inorder(root):
+def bt_morris_inorder(root):
     curr = root
     while curr is not None:
         if curr.left is None:
@@ -122,24 +122,6 @@ def morris_inorder(root):
 
 # TODO: build from preorder and inorder
 # TODO: build complete binary tree from preorder and postorder
-
-if __name__ == "__main__":
-    root = Node(1)
-    root.left = Node(2)
-    root.right = Node(3)
-    root.left.left = Node(4)
-    root.left.right = Node(5)
-    root.right.right = Node(6)
-    print(str(list(map(lambda x: str(x.value), preorder(root)))))
-    print(str(list(map(lambda x: str(x.value), inorder(root)))))
-    print(str(list(map(lambda x: str(x.value), postorder(root)))))
-    print(str(list(map(lambda x: str(x.value), levelorder(root)))))
-    root = rotate_right(root)
-    print(str(list(map(lambda x: str(x.value), inorder(root)))))
-    print(str(list(map(lambda x: str(x.value), levelorder(root)))))
-    root = rotate_left(root)
-    print(str(list(map(lambda x: str(x.value), inorder(root)))))
-    print(str(list(map(lambda x: str(x.value), levelorder(root)))))
 
 # https://www.cnblogs.com/AnnieKim/archive/2013/06/15/MorrisTraversal.html
 # https://github.com/leetcoders/LeetCode/blob/master/BinaryTreeInorderTraversal.h

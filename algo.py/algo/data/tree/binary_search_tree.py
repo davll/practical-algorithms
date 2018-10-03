@@ -39,20 +39,20 @@ class BinarySearchTree:
     def remove(self, key):
         self._root = _remove(self._root, key)
     def preorder(self):
-        from .binary_tree import preorder
-        for node in preorder(self.root):
+        from .binary_tree import bt_preorder
+        for node in bt_preorder(self.root):
             yield (node.key, node.value)
     def inorder(self):
-        from .binary_tree import inorder
-        for node in inorder(self.root):
+        from .binary_tree import bt_inorder
+        for node in bt_inorder(self.root):
             yield (node.key, node.value)
     def postorder(self):
-        from .binary_tree import postorder
-        for node in postorder(self.root):
+        from .binary_tree import bt_postorder
+        for node in bt_postorder(self.root):
             yield (node.key, node.value)
     def levelorder(self):
-        from .binary_tree import levelorder
-        for node in levelorder(self.root):
+        from .binary_tree import bt_levelorder
+        for node in bt_levelorder(self.root):
             yield (node.key, node.value)
 
 class Node:
@@ -112,7 +112,7 @@ def _remove(root, key):
 
 def _is_bst(root):
     if root is None:
-        return False
+        return True
     def check(t, lo, hi):
         if t is None:
             return True
@@ -149,15 +149,3 @@ def _from_preorder(key_value_pairs):
 
 def _from_inorder(key_value_pairs):
     n = len(key_value_pairs)
-
-if __name__ == "__main__":
-    preorder = [(10, 'A'), (5, 'B'), (1, 'C'), (7, 'D'), (40, 'E'), (50, 'F')]
-    bst = BinarySearchTree.from_preorder(preorder)
-    print(str(list(bst.preorder())))
-    print(str(list(bst.inorder())))
-    print(str(list(bst.postorder())))
-    print(str(list(bst.levelorder())))
-    bst[6] = 'ABC'
-    print(str(list(bst.inorder())))
-    del bst[10]
-    print(str(list(bst.inorder())))

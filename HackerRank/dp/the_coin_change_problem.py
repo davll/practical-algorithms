@@ -1,5 +1,12 @@
 # https://www.hackerrank.com/challenges/coin-change/problem
-
+#
+# f[x;c]: the number of ways that make up the amount x
+#         with 1...c coin types
+#
+# f[x;c] = 1                    if x = 0 and c = 0
+#        = f[x;c-1]             if x < c and c > 0
+#        = f[x;c-1] + f[x-c;c]  if x >= c and c > 0
+#
 
 
 def coinchange(amount, coins):
