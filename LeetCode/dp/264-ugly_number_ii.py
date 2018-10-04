@@ -1,3 +1,16 @@
+# Find N-th Ugly Number
+#
+# Hint: Hamming Numbers
+#
+# 2: 1x2 2x2 3x2 4x2 5x2 ...
+# 3: 1x3 2x3 3x3 4x3 5x3
+# 5: 1x5 2x5 3x5 4x5 5x5
+#
+# f[i]: i-th ugly number
+#
+# f[i] = 1            if i = 0
+#      = min { f[i2]*2, f[i3]*3, f[i5]*5 }
+#
 class Solution:
     def nthUglyNumber(self, n):
         """
