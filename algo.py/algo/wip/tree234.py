@@ -25,6 +25,16 @@ class Tree234:
         if node.degree > MAX_DEGREE:
             node = _split(node)
         self._root = node
+    def get(self, key, default_value=None):
+        node = _search(self._root, key)
+        if node is None:
+            if default_value is not None:
+                return default_value
+            else:
+                raise IndexError()
+        else:
+            node, pos = node
+            return node.values[pos]
     #
     def inorder(self):
         yield from _inorder(self._root)

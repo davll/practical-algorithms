@@ -1,5 +1,6 @@
 from unittest import TestCase
 from ..binary_search_tree import BinarySearchTree, Node
+from ..binary_tree import bt_inorder, bt_preorder, bt_postorder, bt_levelorder
 
 def bst1():
     root = Node(20, 'A')
@@ -19,19 +20,19 @@ class TestBST(TestCase):
         self.assertIn(100, bst)
     def test_inorder(self):
         bst = bst1()
-        keys = list(map(lambda x: x[0], bst.inorder()))
-        values = list(map(lambda x: x[1], bst.inorder()))
+        keys = list(map(lambda x: x.key, bt_inorder(bst.root)))
+        values = list(map(lambda x: x.value, bt_inorder(bst.root)))
         self.assertListEqual(keys, [1, 5, 10, 20, 40, 100])
         self.assertListEqual(values, ['C', 'B', 'D', 'A', 'E', 'F'])
     def test_preorder(self):
         bst = bst1()
-        keys = list(map(lambda x: x[0], bst.preorder()))
+        keys = list(map(lambda x: x.key, bt_preorder(bst.root)))
         self.assertListEqual(keys, [20, 5, 1, 10, 40, 100])
     def test_postorder(self):
         bst = bst1()
-        keys = list(map(lambda x: x[0], bst.postorder()))
+        keys = list(map(lambda x: x.key, bt_postorder(bst.root)))
         self.assertListEqual(keys, [1, 10, 5, 100, 40, 20])
     def test_levelorder(self):
         bst = bst1()
-        keys = list(map(lambda x: x[0], bst.levelorder()))
+        keys = list(map(lambda x: x.key, bt_levelorder(bst.root)))
         self.assertListEqual(keys, [20, 5, 40, 1, 10, 100])

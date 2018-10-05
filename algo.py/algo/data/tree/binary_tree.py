@@ -1,72 +1,42 @@
 # Binary Tree
 #
 # 1. every node has at most two children
-#
-
-# Full Binary Tree
-#
-# 1. every node has either 0 or 2 children
-
-# Complete Binary Tree
-#
-# 1. every level (except possibly the last) is completely filled
-# 2. all nodes are as far left as possible
-
-# Perfect Binary Tree
-#
-# 1. all internal nodes have two children
-# 2. all leaves are at the same level
-
-# Balanced Binary Tree
-
-# Degenerate/Pathological Tree
-
-# References:
-# https://www.geeksforgeeks.org/binary-tree-set-3-types-of-binary-tree/
-# http://web.cecs.pdx.edu/~sheard/course/Cs163/Doc/FullvsComplete.html
-# http://web.cecs.pdx.edu/~sheard/course/Cs163/Doc/HeapReview.html
-# https://en.wikipedia.org/wiki/Binary_tree
-# https://en.wikipedia.org/wiki/Binary_search_tree
-# https://en.wikipedia.org/wiki/Tree_traversal
 
 from collections import deque
 
-class Node:
-    def __init__(self, key):
-        self.key = key
-        self.left = None
-        self.right = None
-
 def bt_preorder(root):
-    if root is None:
+    if not root:
         return
     yield root
     yield from bt_preorder(root.left)
     yield from bt_preorder(root.right)
 
 def bt_inorder(root):
-    if root is None:
+    if not root:
         return
     yield from bt_inorder(root.left)
     yield root
     yield from bt_inorder(root.right)
 
 def bt_postorder(root):
-    if root is None:
+    if not root:
         return
     yield from bt_postorder(root.left)
     yield from bt_postorder(root.right)
     yield root
 
 def bt_levelorder(root):
+    if not root:
+        return
     q = deque([root])
     while len(q) > 0:
         node = q.popleft()
-        if node is None:
-            continue
+        assert node
         yield node
-        q.append(node.left)
-        q.append(node.right)
+        if node.left:
+            q.append(node.left)
+        if node.right:
+            q.append(node.right)
 
 #
 #     ROOT             R
@@ -107,7 +77,59 @@ def bt_inverse(root):
     root.left, root.right = bt_inverse(r), bt_inverse(l)
     return root
 
-def bt_morris_inorder(root):
+def bt_preorder_i(root):
+    if root is None:
+        return
+    stack = [root]
+    while len(stack) > 0:
+        node = stack.pop()
+        assert node is not None
+        yield node
+        if node.right is not None:
+            stack.append(node.right)
+        if node.left is not None:
+            stack.append(node.left)
+
+def bt_inorder_i(root):
+    if root is None:
+        return
+    stack = []
+    curr = root
+    while True:
+        if curr is not None:
+            stack.append(curr)
+            curr = curr.left
+        elif len(stack) > 0:
+            curr = stack.pop()
+            assert curr is not None
+            yield curr
+            curr = curr.right
+        else:
+            break
+
+def bt_postorder_i(root):
+    if root is None:
+        return
+    stack = []
+    curr = root
+    while True:
+        while curr is not None:
+            if curr.right is not None:
+                stack.append(curr.right)
+            stack.append(curr)
+            curr = curr.left
+        curr = stack.pop()
+        if stack[-1] == curr.right:
+            stack.pop()
+            stack.append(curr)
+            curr = curr.right
+        else:
+            yield curr
+            curr = None
+        if len(stack) == 0:
+            break
+
+def bt_inorder_morris(root):
     curr = root
     while curr is not None:
         if curr.left is None:
@@ -126,6 +148,39 @@ def bt_morris_inorder(root):
                 pre.right = None
                 yield curr
                 curr = curr.right
+
+def bt_leftmost(root):
+    if root is None:
+        return None
+    while root.left is not None:
+        root = root.left
+    return root
+
+# Full Binary Tree
+#
+# 1. every node has either 0 or 2 children
+
+# Complete Binary Tree
+#
+# 1. every level (except possibly the last) is completely filled
+# 2. all nodes are as far left as possible
+
+# Perfect Binary Tree
+#
+# 1. all internal nodes have two children
+# 2. all leaves are at the same level
+
+# Balanced Binary Tree
+
+# Degenerate/Pathological Tree
+
+# References:
+# https://www.geeksforgeeks.org/binary-tree-set-3-types-of-binary-tree/
+# http://web.cecs.pdx.edu/~sheard/course/Cs163/Doc/FullvsComplete.html
+# http://web.cecs.pdx.edu/~sheard/course/Cs163/Doc/HeapReview.html
+# https://en.wikipedia.org/wiki/Binary_tree
+# https://en.wikipedia.org/wiki/Binary_search_tree
+# https://en.wikipedia.org/wiki/Tree_traversal
 
 # TODO: build from preorder and inorder
 # TODO: build complete binary tree from preorder and postorder

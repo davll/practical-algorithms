@@ -9,7 +9,7 @@ from collections import deque
 class BinarySearchTree:
     #
     def __init__(self, root = None):
-        assert root is None or _is_bst(root)
+        assert bst_validate(root)
         self._root = root
     #
     @classmethod
@@ -24,9 +24,9 @@ class BinarySearchTree:
         return self._root
     #
     def __contains__(self, key):
-        return _search(self._root, key) is not None
+        return bst_search(self._root, key) is not None
     def __getitem__(self, key):
-        node = _search(self._root, key)
+        node = bst_search(self._root, key)
         if node is None:
             raise IndexError()
         return node.value
@@ -38,22 +38,6 @@ class BinarySearchTree:
         self._root = _insert(self._root, key, value)
     def remove(self, key):
         self._root = _remove(self._root, key)
-    def preorder(self):
-        from .binary_tree import bt_preorder
-        for node in bt_preorder(self.root):
-            yield (node.key, node.value)
-    def inorder(self):
-        from .binary_tree import bt_inorder
-        for node in bt_inorder(self.root):
-            yield (node.key, node.value)
-    def postorder(self):
-        from .binary_tree import bt_postorder
-        for node in bt_postorder(self.root):
-            yield (node.key, node.value)
-    def levelorder(self):
-        from .binary_tree import bt_levelorder
-        for node in bt_levelorder(self.root):
-            yield (node.key, node.value)
 
 class Node:
     def __init__(self, key, value):
@@ -62,13 +46,13 @@ class Node:
         self.left = None
         self.right = None
 
-def _search(root, key):
-    if root is None or key == root.key:
-        return root
-    elif key < root.key:
-        return _search(root.left, key)
-    else: # key > root.key
-        return _search(root.right, key)
+def bst_search(root, key):
+    while root is not None and root.key != key:
+        if key < root.key:
+            root = root.left
+        else:
+            root = root.right
+    return root
 
 def _insert(root, key, value):
     if root is None:
@@ -110,7 +94,7 @@ def _remove(root, key):
         root.right = _remove(root.right, tmp.key)
     return root
 
-def _is_bst(root):
+def bst_validate(root):
     if root is None:
         return True
     def check(t, lo, hi):
@@ -130,6 +114,21 @@ def _is_bst(root):
         else:
             return find_max(t.right)
     return check(root, find_min(root), find_max(root))
+
+def bst_inorder_succ(root, node):
+    from .binary_tree import bt_leftmost
+    if node.right is not None:
+        return bt_leftmost(node.right)
+    succ = None
+    while root is not None:
+        if node.key < root.key:
+            succ = root
+            root = root.left
+        elif node.key > root.key:
+            root = root.right
+        else:
+            break
+    return succ
 
 def _from_preorder(key_value_pairs):
     def build_subtree(kv, lo, hi):

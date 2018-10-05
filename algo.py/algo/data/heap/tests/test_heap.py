@@ -1,5 +1,5 @@
 from unittest import TestCase
-from ..heap import heap_init, heap_push, heap_pop
+from ..binary import heap_init, heap_push, heap_pop
 from sys import stderr
 
 def _arr1():

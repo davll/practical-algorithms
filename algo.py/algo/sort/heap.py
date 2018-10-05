@@ -6,7 +6,7 @@
 # Worst case space: O(1) aux
 #
 
-from algo.data.tree.heap import heapify, heap_init
+from algo.data.heap.binary import heapify, heap_init
 from typing import TypeVar, MutableSequence
 
 T = TypeVar('T', int, float)

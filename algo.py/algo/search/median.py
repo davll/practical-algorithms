@@ -1,7 +1,7 @@
 # Median Heap for Running Median (Online Algorithm)
 
 from typing import TypeVar, Generic, List
-from algo.data.tree.heap import min_heap_push, max_heap_push, min_heap_pop, max_heap_pop, heap_peak
+from algo.data.heap.binary import min_heap_push, max_heap_push, min_heap_pop, max_heap_pop, heap_peak
 
 T = TypeVar('T', int, float)
 

@@ -1,10 +1,10 @@
-# Max-Heap
+# Binary Heap
 #
 # Consider k-th element of the array (k: 1 indexed)
 # - its left child is located at 2*k index
 # - its right child is located at 2*k+1 index
 # - its parent is located at k/2 index
-# - and its parent is larger than or equal to it
+# - its parent is larger than or equal to it (Max-Heap)
 
 from typing import TypeVar, Generic, MutableSequence, Callable
 import operator as op
