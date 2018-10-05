@@ -150,9 +150,9 @@ def bt_inorder_morris(root):
                 curr = curr.right
 
 def bt_leftmost(root):
-    if root is None:
-        return None
-    while root.left is not None:
+    if not root:
+        return root
+    while root.left:
         root = root.left
     return root
 

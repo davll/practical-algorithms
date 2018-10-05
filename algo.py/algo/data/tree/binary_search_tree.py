@@ -130,6 +130,21 @@ def bst_inorder_succ(root, node):
             break
     return succ
 
+def bst_succ(root, key):
+    from .binary_tree import bt_leftmost
+    succ = None
+    while root:
+        if key < root.key:
+            succ = root
+            root = root.left
+        elif key > root.key:
+            root = root.right
+        else: # key == root.key
+            if root.right:
+                return bt_leftmost(root.right)
+            break
+    return succ
+
 def _from_preorder(key_value_pairs):
     def build_subtree(kv, lo, hi):
         if len(kv) == 0:

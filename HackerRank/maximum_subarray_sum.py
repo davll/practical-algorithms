@@ -22,8 +22,7 @@ def maximumSum(n, arr, m):
         #        stderr.write('p[{i}] = {pi}, p[{j}] = {pj}, modulo = {m}\n'.format(i=i, j=j, pi=prefix[i], pj=prefix[j], m=modu))
         #        result = max(result, modu)
         # BST search => O(nlogn)
-        this = bst_search(bst.root, prefix[i])
-        succ = bst_inorder_succ(bst.root, this)
+        succ = bst_succ(bst.root, prefix[i])
         if succ is not None:
             modu = (prefix[i] - succ.key + m) % m
             #stderr.write('suss[{i}] = {s}, modulo = {m}\n'.format(i=i, s=succ.key, m=modu))
@@ -127,19 +126,17 @@ def bt_inorder(root):
     yield root
     yield from bt_inorder(root.right)
 
-def bst_inorder_succ(root, node):
-    if node is None:
-        return None
-    if node.right is not None:
-        return bt_leftmost(node.right)
+def bst_succ(root, key):
     succ = None
-    while root is not None:
-        if node.key < root.key:
+    while root:
+        if key < root.key:
             succ = root
             root = root.left
-        elif node.key > root.key:
+        elif key > root.key:
             root = root.right
-        else:
+        else: # key == root.key
+            if root.right:
+                return bt_leftmost(root.right)
             break
     return succ
 
