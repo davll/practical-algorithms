@@ -45,6 +45,10 @@ class Node:
         self.left = None
         self.right = None
 
+class DoubleBlack:
+    def __init__(self, node):
+        self.node = node
+
 def _is_black(node):
     return node is None or node.black
 
@@ -105,11 +109,56 @@ def _insert(root, key, value):
     return root
 
 def _remove(root, key):
-    raise NotImplementedError()
+    if not root:
+        raise IndexError()
+    if key == root.key:
+        if _is_leaf(root):
+            if _is_red(root):
+                return None
+            else:
+                raise NotImplementedError()
+        elif root.left and not root.right:
+            raise NotImplementedError()
+        # TODO
+        raise NotImplementedError()
+    elif key < root.key:
+        root.left = _remove(root.left, key)
+        # TODO: maintain
+    else: # key > root.key
+        root.right = _remove(root.right, key)
+        # TODO: maintain
+    return root
 
 def _validate(root):
     if not _is_black(root):
         return False
-    def _validate_traverse(node):
-        pass
-    return True
+    def _max_black_path(node, d):
+        if _is_black(node):
+            d += 1
+        if not node:
+            return d
+        else:
+            l = _max_black_path(node.left, d)
+            r = _max_black_path(node.right, d)
+            return max(l, r)
+    def _check_black_path(node, d, exp):
+        if _is_black(node):
+            d += 1
+        if not node:
+            return d == exp
+        else:
+            l = _check_black_path(node.left, d, exp)
+            r = _check_black_path(node.right, d, exp)
+            return l and r
+    def _check_red(node, parent):
+        if _is_red(node) and _is_red(parent):
+            return False
+        if not node:
+            return True
+        l = _check_red(node.left, node)
+        r = _check_red(node.right, node)
+        return l and r
+    d = _max_black_path(root, 0)
+    cond1 = _check_black_path(root, 0, d)
+    cond2 = _check_red(root, None)
+    return cond1 and cond2
