@@ -43,7 +43,7 @@ class TestDFS(TestCase):
         #print(str(order), file=stderr)
     def test_reversed_source(self):
         g = _graph1()
-        order = list(dfs(g, source = reversed(range(len(g)))))
+        order = list(dfs(g, sources = reversed(range(len(g)))))
         self.assertListEqual(order, [8, 6, 7, 5, 4, 3, 2, 0, 1])
         #print(str(order), file=stderr)
     def test_detect_cylce1(self):

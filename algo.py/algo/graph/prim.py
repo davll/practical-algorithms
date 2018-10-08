@@ -1,18 +1,20 @@
+import math
+
 class MST:
     """Minimum Spanning Tree
 
     Attributes:
-        n (int): number of vertices
-        w (T): weight of the MST
-        s (int): index of starting vertex
+        size (int): number of vertices
+        weight (T): weight of the MST
+        start (int): index of starting vertex
         parents ([int]): previous vertex of vertex v
 
     """
     #
     def __init__(self, n, w, s, parents):
-        self.n = n
-        self.w = w
-        self.s = s
+        self.size = n
+        self.weight = w
+        self.start = s
         self.parents = parents
 
 def mst_prim(n, edges, s):
@@ -71,4 +73,4 @@ def mst_prim(n, edges, s):
     for i in candidates():
         weight += costs[i]
         relax(i)
-    return MST(n, w, s, parents)
+    return MST(n, weight, s, parents)

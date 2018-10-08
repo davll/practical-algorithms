@@ -1,28 +1,21 @@
 # Kosaraju's Algorithm for finding strongly connected components
 
-from adjlist import Graph
+from algo.data.graph import Graph
 from sys import stderr
 
 def kosaraju(graph):
-    from dfs import dfs, Order
+    from algo.graph.dfs import dfs, dfs_visit_preorder
     n = len(graph)
     # perform DFS
-    order = list(dfs(graph, order=Order.POST))
+    order = list(dfs(graph, postorder=True))
     # perform DFS on transposed graph
-    def dfs2(u, visited, g):
-        assert not visited[u]
-        yield u
-        visited[u] = True
-        for (v,_) in g.edges_from(u):
-            if not visited[v]:
-                yield from dfs2(v, visited, g)
     scc = []
     visited = [False] * n
     trg = graph.transposed()
     for start in reversed(order):
         if visited[start]:
             continue
-        scc.append(list(dfs2(start, visited, trg)))
+        scc.append(list(dfs_visit_preorder(start, trg, visited)))
     return scc
 
 # http://alrightchiu.github.io/SecondRound/graph-li-yong-dfsxun-zhao-strongly-connected-componentscc.html

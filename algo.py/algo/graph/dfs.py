@@ -21,14 +21,11 @@ def dfs_visit_postorder(u, graph, visited):
     # visit vertex u
     yield u
 
-def dfs(graph, postorder = False, source = None):
+def dfs(graph, postorder = False, sources = None):
     n = len(graph)
     visited = [False] * n
-    if source:
-        source = iter(source)
-    else:
-        source = range(0, n)
-    for s in source:
+    sources = iter(sources) if sources else range(n)
+    for s in sources:
         if visited[s]:
             continue
         if postorder:

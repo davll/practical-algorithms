@@ -1,5 +1,5 @@
-from algo.union_find import UnionFind
-from algo.graph.adjlist import UGraph
+from algo.data.union_find import UnionFind
+from algo.data.graph import UGraph
 
 class MST:
     """Minimum Spanning Tree
