@@ -9,17 +9,17 @@ import math
 class SPM:
     """Shortest Path Matrix
     """
-    def __init__(self, n, dist, nxt):
+    def __init__(self, n, dist, next):
         self.n = n
         self.dist = dist
-        self.nxt = nxt
+        self.next = next
     #
     def path(self, s, t):
         ls = []
         i = s
         while i != t:
             ls.append(i)
-            i = nxt[i][t]
+            i = self.next[i][t]
         ls.append(t)
         return ls
 
@@ -31,8 +31,8 @@ def floyd_warshall(n, edges):
     """
     # dist[i][j] = distance from i to j
     dist = [[math.inf] * n for _ in range(n)]
-    # nxt[i][j] = the 2nd vertex after i in the path from i to j
-    nxt = [[j for j in range(n)] for _ in range(n)]
+    # next[i][j] = the 2nd vertex after i in the path from i to j
+    next = [[j for j in range(n)] for _ in range(n)]
     # initialize dist[i][j]
     for (u,v,w) in edges:
         dist[u][v] = min(dist[u,v], w)
@@ -44,10 +44,10 @@ def floyd_warshall(n, edges):
             for j in range(0, n):
                 if dist[i][j] > dist[i][k] + dist[k][j]:
                     dist[i][j] = dist[i][k] + dist[k][j]
-                    nxt[i][j] = nxt[i][k]
+                    next[i][j] = next[i][k]
     # detect negative cycle
     for i in range(0, n):
         if dist[i][i] < 0:
             return None
     # return matrix of distances
-    return SPM(n, dist, nxt)
+    return SPM(n, dist, next)
