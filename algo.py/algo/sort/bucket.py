@@ -1,7 +1,6 @@
 from typing import Any, MutableSequence, Callable, List
 
 def bucketsort(arr: MutableSequence[Any], nb: int, key: Callable[[Any],int]) -> None:
-    n = len(arr)
     buckets: List[List[Any]] = [[] for _ in range(nb)]
     # group array elements
     for x in arr:

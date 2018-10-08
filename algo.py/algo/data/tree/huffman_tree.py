@@ -2,26 +2,26 @@
 
 import heapq
 
-class _Node:
+class Node:
     def __init__(self, k, f):
         self.key = k
         self.freq = f
         self.left = None
         self.right = None
     def __eq__(self, other):
-        assert other is _Node
+        assert other is Node
         return self.freq == other.freq
     def __lt__(self, other):
-        assert other is _None
+        assert other is Node
         return self.freq < other.freq
     def __gt__(self, other):
-        assert other is _None
+        assert other is Node
         return self.freq > other.freq
 
 class HuffmanTree:
     def __init__(self, key_freq_iter):
         # init min-heap
-        q = list(map(lambda x: _Node(x[0], x[1]), key_freq_iter))
+        q = list(map(lambda x: Node(x[0], x[1]), key_freq_iter))
         heapq.heapify(q)
         # repeat until only one element left in heap
         while len(q) > 1:
@@ -29,7 +29,7 @@ class HuffmanTree:
             a = heapq.heappop(q)
             b = heapq.heappop(q)
             # create a node
-            x = _Node(None, a.f + b.f)
+            x = Node(None, a.f + b.f)
             x.left = a
             x.right = b
             # push to min-heap
@@ -56,9 +56,9 @@ class HuffmanTree:
         decoded = []
         for x in map(int, s):
             assert x == 0 or x == 1
-            if c == 0:
+            if x == 0:
                 t = t.left
-            elif c == 1:
+            elif x == 1:
                 t = t.right
             # check if the node is a leaf
             if not t.left and not t.right:

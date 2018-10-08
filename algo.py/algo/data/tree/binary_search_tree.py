@@ -95,6 +95,7 @@ def _remove(root, key):
     return root
 
 def bst_validate(root):
+    from math import inf
     if root is None:
         return True
     def check(t, lo, hi):
@@ -103,17 +104,7 @@ def bst_validate(root):
         if t.key < lo or t.key > hi:
             return False
         return check(t.left, lo, t.key) and check(t.right, t.key, hi)
-    def find_min(t):
-        if t.left is None:
-            return t.key
-        else:
-            return find_min(t.left)
-    def find_max(t):
-        if t.right is None:
-            return t.key
-        else:
-            return find_max(t.right)
-    return check(root, find_min(root), find_max(root))
+    return check(root, -inf, inf)
 
 def bst_inorder_succ(root, node):
     from .binary_tree import bt_leftmost
