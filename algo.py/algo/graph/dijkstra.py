@@ -109,8 +109,8 @@ def dijkstra2(graph, source):
     costs, parents = [math.inf] * n, [-1] * n
     visited = [False] * n
     # initialise
-    costs[s] = 0
-    queue = [(0, -1, s)]
+    costs[source] = 0
+    queue = [(0, -1, source)]
     #
     while len(queue) > 0:
         # extract the nearest vertex u which is not visited
