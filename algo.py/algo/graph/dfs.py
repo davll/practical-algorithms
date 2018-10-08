@@ -39,19 +39,19 @@ def dfs(graph, postorder = False, source = None):
 def detect_cycle(graph):
     n = len(graph)
     visited = [False] * n
-    intree = [False] * n
+    instack = [False] * n
     def _dfs_visit(u):
         assert not visited[u]
-        assert not intree[u]
+        assert not instack[u]
         visited[u] = True
-        intree[u] = True
+        instack[u] = True
         for (v,_) in graph.edges_from(u):
             if not visited[v]:
                 if _dfs_visit(v):
                     return True
-            elif intree[v]:
+            elif instack[v]:
                 return True
-        intree[u] = False
+        instack[u] = False
         return False
     for s in range(0, n):
         if visited[s]:

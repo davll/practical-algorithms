@@ -4,6 +4,7 @@ from collections import deque
 
 def bfs_visit(s, graph, visited):
     assert not visited[s]
+    # Initialise
     q = deque([s])
     visited[s] = True
     # Iterate
@@ -18,10 +19,7 @@ def bfs_visit(s, graph, visited):
 def bfs(graph, source = None):
     n = len(graph)
     visited = [False] * n
-    if source:
-        source = iter(source)
-    else:
-        source = range(0, n)
+    source = iter(source) if source else range(n)
     for s in source:
         if visited[s]:
             continue
