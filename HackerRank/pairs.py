@@ -1,3 +1,5 @@
+# ww.hackerrank.com/challenges/pairs/problem
+
 from sys import stdin, stdout, stderr
 
 def pairs(k, arr):
