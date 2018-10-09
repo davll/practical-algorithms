@@ -26,3 +26,6 @@ def knapsack(capacity, weights, values, n):
             else:
                 dp[i][c] = max(dp[i-1][c], dp[i-1][c-w] + v)
     return dp[n][capacity]
+
+if __name__ == "__main__":
+    pass
