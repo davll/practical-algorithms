@@ -1,5 +1,6 @@
 # Maximum Sum
 
+# Kadane's Algorithm
 #
 # f[i]: maximum sum of subarray ending at i
 #
