@@ -13,6 +13,9 @@
 #
 # 1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, ...
 #
+# https://practice.geeksforgeeks.org/problems/nth-catalan-number/0
+# https://www.geeksforgeeks.org/program-nth-catalan-number/
+#
 
 from itertools import count
 
@@ -27,8 +30,7 @@ def catalan():
 # TODO
 
 # Applications
-#
-# 1. 
+# https://www.geeksforgeeks.org/applications-of-catalan-numbers/
 #
 
 if __name__ == "__main__":
