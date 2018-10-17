@@ -48,6 +48,9 @@ def min_heapify(h: MutableSequence[T], n: int, i: int) -> None:
 def heap_peak(h: MutableSequence[T]) -> T:
     return h[0]
 
+min_heap_peak = heap_peak
+max_heap_peak = heap_peak
+
 # T = O(n)
 def max_heap_init(a: MutableSequence[T]) -> None:
     for i in range(1, len(a)+1):
