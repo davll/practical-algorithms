@@ -1,4 +1,4 @@
-# https://www.geeksforgeeks.org/k-th-element-two-sorted-arrays/
+# https://www.geeksforgeeks.org/median-two-sorted-arrays-different-sizes-ologminn-m/
 
 def median_v1(nums1, nums2):
     l = len(nums1) + len(nums2)
