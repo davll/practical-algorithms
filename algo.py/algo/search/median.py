@@ -1,45 +1,49 @@
-# Median Heap for Running Median (Online Algorithm)
+# Find Median
 
-from typing import TypeVar, Generic, List
-from algo.data.heap.binary import min_heap_push, max_heap_push, min_heap_pop, max_heap_pop, heap_peak
+from typing import TypeVar, Sequence, List, Iterator
 
 T = TypeVar('T', int, float)
 
-class MedianHeap(Generic[T]):
-    def __init__(self) -> None:
-        self.left: List[T] = []
-        self.right: List[T] = []
+# T = O()
+def median_of_two_sorted(arr1: Sequence[T], arr2: Sequence[T]) -> float:
+    pass
+
+def running_median(nums: Iterator[T]) -> Iterator[float]:
+    from algo.data.heap.binary import min_heap_push, max_heap_push, min_heap_pop, max_heap_pop, heap_peak
     #
-    def query(self) -> float:
-        nl, nr = len(self.left), len(self.right)
+    left: List[T] = [] # max-heap
+    right: List[T] = [] # min-heap
+    #
+    def push(x: T) -> None:
+        max_heap_push(left, x)
+        if right:
+            while heap_peak(left) > heap_peak(right):
+                x = max_heap_pop(left)
+                min_heap_push(right, x)
+        while len(left) > len(right) + 1:
+            x = max_heap_pop(left)
+            min_heap_push(right, x)
+        while len(left) + 1 < len(right):
+            x = min_heap_pop(right)
+            max_heap_push(left, x)
+    #
+    def query() -> float:
+        nl, nr = len(left), len(right)
+        assert abs(nl - nr) <= 1
         if nl == 0 and nr == 0:
             raise IndexError()
         elif nl > nr:
-            return heap_peak(self.left)
+            return heap_peak(left)
         elif nl < nr:
-            return heap_peak(self.right)
+            return heap_peak(right)
         else: # nl == nr
-            ml = heap_peak(self.left)
-            mr = heap_peak(self.right)
+            ml = heap_peak(left)
+            mr = heap_peak(right)
             return (ml + mr) / 2
     #
-    def insert(self, x: T) -> None:
-        if not self.left and not self.right:
-            max_heap_push(self.left, x)
-        elif x <= heap_peak(self.left):
-            max_heap_push(self.left, x)
-            if len(self.left) > len(self.right) + 1:
-                x = max_heap_pop(self.left)
-                min_heap_push(self.right, x)
-        elif not self.right or x >= heap_peak(self.right):
-            min_heap_push(self.right, x)
-            if len(self.left) + 1 < len(self.right):
-                x = min_heap_pop(self.right)
-                max_heap_push(self.left, x)
-        elif len(self.left) < len(self.right):
-            max_heap_push(self.left, x)
-        else:
-            min_heap_push(self.right, x)
-        assert abs(len(self.left) - len(self.right)) <= 1
+    for x in iter(nums):
+        push(x)
+        yield query()
 
+# https://www.geeksforgeeks.org/k-th-element-two-sorted-arrays/
 # https://www.geeksforgeeks.org/median-of-stream-of-integers-running-integers/
