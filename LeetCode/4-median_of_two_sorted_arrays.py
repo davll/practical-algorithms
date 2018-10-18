@@ -1,29 +1,39 @@
 # https://www.geeksforgeeks.org/median-two-sorted-arrays-different-sizes-ologminn-m/
 
-def median_v1(nums1, nums2):
-    n, a = len(nums1) + len(nums2), nums1 + nums2
-    a.sort()
-    if n % 2 == 1:
-        return a[n // 2]
-    else:
-        return (a[n // 2] + a[n // 2 - 1]) / 2
+from sys import stderr
 
-def median_v2(nums1, nums2):
-    a, b = sorted((nums1, nums2), key=len)
-    m, n = len(a), len(b)
-    after = (m + n - 1) // 2
-    lo, hi = 0, m
-    while lo < hi:
-        i = (lo + hi) // 2
-        j = after-i-1
-        if j < 0 or a[i] >= b[j]:
-            hi = i
+def median(arr1, arr2):
+    from math import inf
+    if len(arr1) > len(arr2):
+        arr1, arr2 = arr2, arr1
+    def get(a, i):
+        if i < 0:
+            return -inf
+        elif i >= len(a):
+            return inf
         else:
-            lo = i + 1
-    i = lo
-    j = after - i
-    tmp = sorted(a[i:i+2] + b[j:j+2])
-    return (tmp[0] + tmp[1-(m+n)%2]) / 2
+            return a[i]
+    n1, n2 = len(arr1), len(arr2)
+    psiz = (n1 + n2) // 2
+    lo, hi = 0, n1
+    lo, hi = 0, len(arr1)
+    index = None
+    while lo <= hi:
+        i = (lo + hi) // 2
+        j = psiz - i
+        if get(arr1, i-1) > get(arr2, j):
+            hi = i-1
+        elif get(arr2, j-1) > get(arr1, i):
+            lo = i+1
+        else:
+            index = i
+            break
+    i = index
+    j = psiz - i
+    if (n1 + n2) % 2 == 1:
+        return min(get(arr1, i), get(arr2, j))
+    else:
+        return (max(get(arr1, i-1), get(arr2, j-1)) + min(get(arr1, i), get(arr2, j))) / 2
 
 class Solution:
     def findMedianSortedArrays(self, nums1, nums2):
@@ -32,9 +42,4 @@ class Solution:
         :type nums2: List[int]
         :rtype: float
         """
-        return median_v2(nums1, nums2)
-
-#if __name__ == "__main__":
-#    l1 = [1,2,3]
-#    l2 = [1,2,2]
-#    print("median = " + str(median_v2(l1, l2)))
+        return median(nums1, nums2)

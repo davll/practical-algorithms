@@ -6,10 +6,18 @@ from algo.data.heap.binary import min_heap_push, max_heap_push, min_heap_pop, ma
 T = TypeVar('T', int, float)
 
 # T = O(log(min(m,n)))
-def find_median_of_two_sorted(arr1: Sequence[T], arr2: Sequence[T]):
+def find_median_of_two_sorted(arr1: Sequence[T], arr2: Sequence[T]) -> float:
+    from math import inf
     # arr1 should be smaller than arr2
     if len(arr1) > len(arr2):
         arr1, arr2 = arr2, arr1
+    def get(a, i):
+        if i < 0:
+            return -inf
+        elif i >= len(a):
+            return inf
+        else:
+            return a[i]
     #
     # define a partition:
     #
@@ -23,8 +31,10 @@ def find_median_of_two_sorted(arr1: Sequence[T], arr2: Sequence[T]):
     #       j     = psize - i
     #       psize = (len(arr1) + len(arr2)) / 2
     #
+    # p.s. the right part can be bigger than the left part at most one
+    #
     n1, n2 = len(arr1), len(arr2)
-    psize = (n1 + n2) // 2
+    psiz = (n1 + n2) // 2
     #
     # find a partition so that
     #     all elements of arr1[:i]+arr2[:j] <= all elements of arr1[i:]+arr2[j:]
@@ -35,21 +45,49 @@ def find_median_of_two_sorted(arr1: Sequence[T], arr2: Sequence[T]):
     #   4) arr2[j-1] <= arr1[i]
     #
     lo, hi = 0, n1
-    while lo < hi:
+    lo, hi = 0, len(arr1)
+    index = None
+    while lo <= hi:
         i = (lo + hi) // 2
-        j = psize - i
-        yield (i, j, lo, hi)
-        if i == 0 or arr1[i-1] > arr2[j]:
-            hi = i
-        elif j == 0 or arr2[j-1] > arr2[i]:
-            lo = i
-    #
-    i, j = lo, psize - lo
-    yield (i, j, lo, hi)
-    #if (n1 + n2) % 2 == 1:
-    #    return min(arr1[i:i+1] + arr2[j:j+1])
-    #else:
-    #    return (max(arr1[i-1:i] + arr2[j-1:j]) + min(arr1[i:i+1] + arr2[j:j+1])) / 2
+        j = psiz - i
+        if get(arr1, i-1) > get(arr2, j):
+            #
+            #  ... (i-1) | (i) ...
+            #  ... (j-1) | (j) ...
+            #
+            # and arr1[i-1] > arr2[j]
+            #
+            # => move (i-1) to the right part
+            # => move (j) to the left part
+            #
+            #  ... | (i-1) (i) ...
+            #  ... (j-1) (j) | ...
+            #
+            hi = i-1
+        elif get(arr2, j-1) > get(arr1, i):
+            #
+            #  ... (i-1) | (i) ...
+            #  ... (j-1) | (j) ...
+            #
+            # and arr2[j-1] > arr1[i]
+            #
+            # => move (i) to the left part
+            # => move (j-1) to the right part
+            #
+            #  ... (i-1) (i) | ...
+            #  ... | (j-1) (j) ...
+            #
+            lo = i+1
+        else:
+            # terminate if the condition is satisfied
+            index = i
+            break
+    i = index
+    j = psiz - i
+    if (n1 + n2) % 2 == 1:
+        return min(get(arr1, i), get(arr2, j))
+    else:
+        return (max(get(arr1, i-1), get(arr2, j-1)) + min(get(arr1, i), get(arr2, j))) / 2
 
 # Find running medians from stream
 class MedianHeap(Generic[T]):
@@ -83,14 +121,3 @@ class MedianHeap(Generic[T]):
 # https://www.geeksforgeeks.org/median-of-two-sorted-arrays-of-different-sizes/
 # https://www.geeksforgeeks.org/median-two-sorted-arrays-different-sizes-ologminn-m/
 # 
-
-if __name__ == "__main__":
-    a1 = [1, 2]
-    a2 = [3, 4]
-    #a1 = [-5, 3, 6, 12, 15]
-    #a2 = [-12, -10, -6, -3, 4, 10]
-    #print(str(find_median_of_two_sorted(a1, a2)))
-    for i, j, lo, hi in find_median_of_two_sorted(a1, a2):
-        print("lo = {lo}, hi = {hi}".format(lo=lo, hi=hi))
-        print("a1[:{i}:]: [{l} | {r}]".format(i=i, l=' '.join(map(str, a1[:i])), r=' '.join(map(str, a1[i:]))))
-        print("a2[:{i}:]: [{l} | {r}]".format(i=j, l=' '.join(map(str, a2[:j])), r=' '.join(map(str, a2[j:]))))
