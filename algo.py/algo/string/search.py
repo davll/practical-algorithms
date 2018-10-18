@@ -1,4 +1,10 @@
 # Knuth Morris Pratt
+class Kmp:
+    def __init__(self, pattern):
+        self.pattern = pattern
+        # compute prefix table
+    def search(self, text):
+        pass
 
 # Boyer Moore
 
