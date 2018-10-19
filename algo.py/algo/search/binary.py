@@ -1,3 +1,5 @@
+from typing import Optional, Callable, Sequence, TypeVar, Union
+from ..ty import Comparable
 from enum import Enum
 
 class Mode(Enum):
@@ -5,7 +7,9 @@ class Mode(Enum):
     LOWER_BOUND = 1
     UPPER_BOUND = 2
 
-def bsearch(func, l, r, key, mode=Mode.DEFAULT):
+T = TypeVar('T', bound=Comparable)
+
+def bsearch(func: Callable[[int], T], l: int, r: int, key: T, mode: Mode = Mode.DEFAULT) -> Optional[int]:
     """
     func
     l: lower bound (ex: 0)
@@ -31,5 +35,5 @@ def bsearch(func, l, r, key, mode=Mode.DEFAULT):
     return result
 
 # References:
-# Python: bisect in standard library
+# https://github.com/python/cpython/blob/3.7/Lib/bisect.py
 # https://ai.googleblog.com/2006/06/extra-extra-read-all-about-it-nearly.html
