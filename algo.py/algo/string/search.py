@@ -4,7 +4,7 @@ from typing import Iterator
 
 # Knuth Morris Pratt
 class KmpSearch:
-    def __init__(self, pattern: str):
+    def __init__(self, pattern: str) -> None:
         # compute prefix table
         #
         # Define a function F(i) = table[i]
