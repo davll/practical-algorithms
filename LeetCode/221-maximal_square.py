@@ -1,11 +1,14 @@
 # Maximal Square
 #
-# f[i,j] = the length of the square whose lower-right corner is at (i,j)
+# f[i,j] = the size of the square whose lower-right corner is at (i,j)
 #
 # f[i,j] = M[0,j]   if i = 0
 #        = M[i,0]   if j = 0
 #        = 0        if M[i,j] = 0
 #        = min { f[i-1,j-1], f[i,j-1], f[i-1,j] } + 1 otherwise
+#
+# https://www.geeksforgeeks.org/maximum-size-sub-matrix-with-all-1s-in-a-binary-matrix/
+#
 
 class Solution:
     def maximalSquare(self, matrix):
