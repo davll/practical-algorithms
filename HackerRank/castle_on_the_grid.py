@@ -16,27 +16,27 @@ def minimumMoves(n, grid, startx, starty, goalx, goaly):
             queue.append((x, y))
         return True
     while len(queue) > 0:
-        x, y = queue.popleft()
-        assert grid[x][y] != 'X'
-        assert moves[x][y] != -1
-        if x == goalx and y == goaly:
+        posx, posy = queue.popleft()
+        assert grid[posx][posy] != 'X'
+        assert moves[posx][posy] != -1
+        if posx == goalx and posy == goaly:
             break
-        m = moves[x][y]
+        m = moves[posx][posy]
         # +x direction
-        for i in range(x+1, n):
-            if not push(i, y, m+1):
+        for i in range(posx+1, n):
+            if not push(i, posy, m+1):
                 break
         # -x direction
-        for i in range(x-1, -1, -1):
-            if not push(i, y, m+1):
+        for i in range(posx-1, -1, -1):
+            if not push(i, posy, m+1):
                 break
         # +y direction
-        for j in range(y+1, n):
-            if not push(x, j, m+1):
+        for j in range(posy+1, n):
+            if not push(posx, j, m+1):
                 break
-        # -x direction
-        for j in range(y-1, -1, -1):
-            if not push(x, j, m+1):
+        # -y direction
+        for j in range(posy-1, -1, -1):
+            if not push(posx, j, m+1):
                 break
     return moves[goalx][goaly]
 

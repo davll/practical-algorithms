@@ -1,3 +1,4 @@
+# Maximal Square
 #
 # f[i,j] = the length of the square whose lower-right corner is at (i,j)
 #
