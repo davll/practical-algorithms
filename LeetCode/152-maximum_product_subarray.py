@@ -1,3 +1,10 @@
+# Maximum Product Subarray
+#
+# Hint: Dynamic Programming
+#
+#
+#
+
 class Solution:
     def maxProduct(self, nums):
         """
