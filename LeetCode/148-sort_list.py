@@ -4,54 +4,50 @@
 #         self.val = x
 #         self.next = None
 
-def merge_lists(l1, l2):
+def _take(ls):
+    # List -> (Node, List)
+    tmp = ls.next
+    ls.next = None
+    return (ls, tmp)
+
+def _merge(l1, l2):
     head, tail = None, None
+    # initialise head and tail
+    if l1 and (not l2 or l1.val <= l2.val):
+        head, l1 = _take(l1)
+    elif l2 and (not l1 or l1.val > l2.val):
+        head, l2 = _take(l2)
+    tail = head
+    # merge
     while l1 and l2:
         if l1.val <= l2.val:
-            tmp = l1.next
-            l1.next = None
-            if tail:
-                tail.next = l1
-                tail = l1
-            else:
-                head, tail = l1, l1
-            l1 = tmp
-        elif l1.val > l2.val:
-            tmp = l2.next
-            l2.next = None
-            if tail:
-                tail.next = l2
-                tail = l2
-            else:
-                head, tail = l2, l2
-            l2 = tmp
+            node, l1 = _take(l1)
+            tail.next = node
+        else: #l1.val > l2.val
+            node, l2 = _take(l2)
+            tail.next = node
+        tail = tail.next
     if l1:
-        if tail:
-            tail.next = l1
-        else:
-            head, tail = l1, l1
-    elif l2:
-        if tail:
-            tail.next = l2
-        else:
-            head, tail = l2, l2
+        tail.next = l1
+    if l2:
+        tail.next = l2
     return head
 
-def merge_sort(head, n):
-    if n == 1 or n == 0:
-        return head
-    else:
-        # split the list
-        m = n // 2
-        prev, mid = None, head
-        for _ in range(0, m):
-            prev, mid = mid, mid.next
+def _split(ls):
+    assert ls
+    prev, slow, fast = None, ls, ls
+    while fast and fast.next:
+        fast = fast.next.next
+        prev, slow = slow, slow.next
+    if prev:
         prev.next = None
-        # recursive down
-        l1 = merge_sort(head, m)
-        l2 = merge_sort(mid, n - m)
-        # merge two sorted lists
-        return merge_lists(l1, l2)
+    return (ls, slow)
+
+def merge_sort(head):
+    if not head or not head.next:
+        return head
+    l1, l2 = map(merge_sort, _split(head))
+    return _merge(l1, l2)
 
 class Solution:
     def sortList(self, head):
@@ -59,9 +55,4 @@ class Solution:
         :type head: ListNode
         :rtype: ListNode
         """
-        if not head:
-            return None
-        n, p = 0, head
-        while p != None:
-            n, p = n+1, p.next
-        return merge_sort(head, n)
+        return merge_sort(head)

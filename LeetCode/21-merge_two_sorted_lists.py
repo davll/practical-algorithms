@@ -4,37 +4,33 @@
 #         self.val = x
 #         self.next = None
 
+def _take(ls):
+    # List -> (Node, List)
+    tmp = ls.next
+    ls.next = None
+    return (ls, tmp)
+
 def merge_lists(l1, l2):
     head, tail = None, None
+    # initialise head and tail
+    if l1 and (not l2 or l1.val <= l2.val):
+        head, l1 = _take(l1)
+    elif l2 and (not l1 or l1.val > l2.val):
+        head, l2 = _take(l2)
+    tail = head
+    # merge
     while l1 and l2:
         if l1.val <= l2.val:
-            tmp = l1.next
-            l1.next = None
-            if tail:
-                tail.next = l1
-                tail = l1
-            else:
-                head, tail = l1, l1
-            l1 = tmp
-        elif l1.val > l2.val:
-            tmp = l2.next
-            l2.next = None
-            if tail:
-                tail.next = l2
-                tail = l2
-            else:
-                head, tail = l2, l2
-            l2 = tmp
+            node, l1 = _take(l1)
+            tail.next = node
+        else: #l1.val > l2.val
+            node, l2 = _take(l2)
+            tail.next = node
+        tail = tail.next
     if l1:
-        if tail:
-            tail.next = l1
-        else:
-            head, tail = l1, l1
-    elif l2:
-        if tail:
-            tail.next = l2
-        else:
-            head, tail = l2, l2
+        tail.next = l1
+    if l2:
+        tail.next = l2
     return head
 
 class Solution:
