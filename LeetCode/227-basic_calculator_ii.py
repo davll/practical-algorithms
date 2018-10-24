@@ -3,7 +3,7 @@ def tokenize(s):
     while i < n:
         if s[i].isspace():
             i += 1
-        elif s[i] in ['+', '-', '(', ')']:
+        elif s[i] in ['+', '-', '*', '/']:
             yield s[i]
             i += 1
         else:
@@ -12,6 +12,15 @@ def tokenize(s):
                 j += 1
             yield int(s[i:j])
             i = j
+
+OPERATORS = ['+', '-', '*', '/']
+
+PRECEDENCE = {
+    '+': 1,
+    '-': 1,
+    '*': 2,
+    '/': 2
+}
 
 def eval_tokens(tokens):
     result = []
@@ -24,20 +33,17 @@ def eval_tokens(tokens):
             result.append(a1 + a2)
         elif op == '-':
             result.append(a1 - a2)
+        elif op == '*':
+            result.append(a1 * a2)
+        elif op == '/':
+            result.append(a1 // a2)
         else:
             raise RuntimeError()
     for tok in tokens:
-        if tok in ['+', '-']:
-            while opstack and opstack[-1] != '(':
+        if tok in OPERATORS:
+            while opstack and PRECEDENCE[opstack[-1]] >= PRECEDENCE[tok]:
                 pop_op()
             opstack.append(tok)
-        elif tok == '(':
-            opstack.append(tok)
-        elif tok == ')':
-            while opstack[-1] != '(':
-                pop_op()
-            assert opstack[-1] == '('
-            opstack.pop()
         else:
             result.append(tok)
     while opstack:

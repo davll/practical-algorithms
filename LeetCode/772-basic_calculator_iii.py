@@ -1,5 +1,3 @@
-# Expression Parsing
-
 OPERATORS = ['+', '-', '*', '/']
 
 PRECEDENCE = {
@@ -9,10 +7,6 @@ PRECEDENCE = {
     '/': 3,
 }
 
-# Shunting-yard Algorithm
-#
-# http://www.oxfordmathcenter.com/drupal7/node/628
-# https://en.wikipedia.org/wiki/Shunting-yard_algorithm
 def infix_to_rpn(tokens):
     result = []
     opstack = []
@@ -39,11 +33,10 @@ RPN_OPERATORS = {
     '+': (2, lambda x, y: x + y),
     '-': (2, lambda x, y: x - y),
     '*': (2, lambda x, y: x * y),
-    '/': (2, lambda x, y: x / y)
+    '/': (2, lambda x, y: x // y)
 }
 
-# Evaluate Reverse Polish Notation
-def eval_postfix(tokens):
+def eval_rpn(tokens):
     stack = []
     for token in tokens:
         if token in RPN_OPERATORS:
@@ -51,9 +44,31 @@ def eval_postfix(tokens):
             args = [stack.pop() for _ in range(n)]
             args.reverse()
             result = f(*args)
-            #print("{r} = {op} {args}".format(op=token, args=args, r=result))
             stack.append(result)
         else:
             stack.append(int(token))
     assert len(stack) == 1
     return stack[-1]
+
+def tokenize(s):
+    i, n = 0, len(s)
+    while i < n:
+        if s[i].isspace():
+            i += 1
+        elif s[i] in ['+', '-', '*', '/', '(', ')']:
+            yield s[i]
+            i += 1
+        else:
+            j = i + 1
+            while j < n and s[j].isdigit():
+                j += 1
+            yield int(s[i:j])
+            i = j
+
+class Solution:
+    def calculate(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        return eval_rpn(infix_to_rpn(tokenize(s)))
