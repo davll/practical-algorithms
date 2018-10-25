@@ -6,11 +6,13 @@ def trap_water_v1(heights):
     from heapq import heapify, heappush, heappop
     #
     m, n = len(heights), len(heights[0])
+    if m < 3 or n < 3:
+        return 0
     #print("m = {m}, n = {n}".format(m=m, n=n))
     heap = []
     visited = [[False for _ in range(n)] for _ in range(m)]
     # visit borders
-    for j in range(0, n, max(n-1, 1)):
+    for j in (0, n-1):
         if j not in range(n):
             continue
         for i in range(m):
@@ -18,7 +20,7 @@ def trap_water_v1(heights):
             #print("visit h[{i}, {j}] = {h}".format(i=i,j=j,h=heights[i][j]))
             heap.append((heights[i][j], i, j))
             visited[i][j] = True
-    for i in range(0, m, max(m-1, 1)):
+    for i in (0, m-1):
         if i not in range(m):
             continue
         for j in range(1,n-1):
