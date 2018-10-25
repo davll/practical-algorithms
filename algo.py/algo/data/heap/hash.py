@@ -1,66 +1,5 @@
-from collections import deque, namedtuple
+from collections import namedtuple
 import operator as op
-
-def median_sliding_window_v1(nums, k):
-    queue = deque()
-    results = []
-    median = [0] * k
-    for x in nums:
-        while len(queue) >= k:
-            queue.popleft()
-        queue.append(x)
-        if len(queue) == k:
-            for j in range(k):
-                median[j] = queue[j]
-            median.sort()
-            if k % 2 == 1:
-                results.append(float(median[k//2]))
-            else:
-                results.append((median[k//2]+median[k//2-1])/2)
-    return results
-
-def median_sliding_window_v2(nums, k):
-    n = len(nums)
-    if n == 0 or k == 0:
-        return []
-    leftheap = MaxHashHeap()
-    rightheap = MinHashHeap()
-    def median():
-        if k % 2 == 1:
-            assert len(leftheap) == len(rightheap) + 1
-            return float(leftheap.peak()[1])
-        else:
-            assert len(leftheap) == len(rightheap)
-            return (leftheap.peak()[1] + rightheap.peak()[1]) / 2
-    for i in range(k):
-        if i % 2 == 0:
-            rightheap.add(i, nums[i])
-            leftheap.add(*(rightheap.pop()))
-        else:
-            leftheap.add(i, nums[i])
-            rightheap.add(*(leftheap.pop()))
-    results = [median()]
-    for i in range(k, n):
-        j = i - k
-        if j in rightheap:
-            rightheap.remove(j)
-            leftheap.add(i, nums[i])
-            rightheap.add(*(leftheap.pop()))
-        else:
-            leftheap.remove(j)
-            rightheap.add(i, nums[i])
-            leftheap.add(*(rightheap.pop()))
-        results.append(median())
-    return results
-
-class Solution:
-    def medianSlidingWindow(self, nums, k):
-        """
-        :type nums: List[int]
-        :type k: int
-        :rtype: List[float]
-        """
-        return median_sliding_window_v2(nums, k)
 
 Entry = namedtuple('Entry', ['key', 'value'])
 
@@ -157,7 +96,7 @@ class HashHeap:
         return i
 
 def MinHashHeap():
-    return HashHeap(lt=op.gt)
+    return HashHeap(lt=op.lt)
 
 def MaxHashHeap():
-    return HashHeap(lt=op.lt)
+    return HashHeap(lt=op.gt)

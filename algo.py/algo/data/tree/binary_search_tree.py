@@ -15,9 +15,6 @@ class BinarySearchTree:
     @classmethod
     def from_preorder(cls, key_value_pairs):
         return BinarySearchTree(_from_preorder(key_value_pairs))
-    @classmethod
-    def from_inorder(cls, key_value_pairs):
-        return BinarySearchTree(_from_inorder(key_value_pairs))
     #
     @property
     def root(self):
@@ -136,6 +133,16 @@ def bst_succ(root, key):
             break
     return succ
 
+def bst_min(root):
+    while root and root.left:
+        root = root.left
+    return root
+
+def bst_max(root):
+    while root and root.right:
+        root = root.right
+    return root
+
 def _from_preorder(key_value_pairs):
     def build_subtree(kv, lo, hi):
         if len(kv) == 0:
@@ -151,6 +158,3 @@ def _from_preorder(key_value_pairs):
             return None
     q = deque(key_value_pairs)
     return build_subtree(q, min(map(lambda x: x[0], q)), max(map(lambda x: x[0], q)))
-
-def _from_inorder(key_value_pairs):
-    n = len(key_value_pairs)
