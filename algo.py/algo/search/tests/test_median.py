@@ -7,6 +7,6 @@ class TestMedianHeap(TestCase):
         a = [12, 4, 5, 3, 8, 7]
         m = []
         for x in a:
-            mh.insert(x)
+            mh.append(x)
             m.append(mh.query())
         self.assertListEqual(m, [12, 8, 5, 4.5, 5, 6])
