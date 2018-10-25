@@ -1,34 +1,60 @@
 # https://leetcode.com/problems/trapping-rain-water/description/
 
-def compute_left_barriers(arr):
-    n = len(arr)
+# Idea: Dynamic Programming
+# T = O(n)
+def trap_water_v2(height):
+    n = len(height)
     left = [0] * n
+    right = [n-1] * n
+    # compute left barriers
     curr_left = 0
     for i in range(1, n):
-        if arr[i] >= arr[curr_left]:
+        if height[i] >= height[curr_left]:
             curr_left = i
         left[i] = curr_left
-    return left
-
-def compute_right_barriers(arr):
-    n = len(arr)
-    right = [n-1] * n
+    # compute right barriers
     curr_right = n-1
     for i in range(n-2,-1,-1):
-        if arr[i] >= arr[curr_right]:
+        if height[i] >= height[curr_right]:
             curr_right = i
         right[i] = curr_right
-    return right
-
-def trap_water(arr):
-    left = compute_left_barriers(arr)
-    right = compute_right_barriers(arr)
+    #
     result = 0
-    n = len(arr)
     for i in range(n):
-        h = min(arr[left[i]], arr[right[i]])
-        result += max(0, h - arr[i])
+        h = min(height[left[i]], height[right[i]])
+        result += max(0, h - height[i])
     return result
+
+# Idea: BFS
+def trap_water_v3(height):
+    from heapq import heappush, heappop, heapify
+    #
+    n = len(height)
+    heap = []
+    visited = [False] * n
+    # add borders
+    for i in (0, n-1):
+        if i not in range(n):
+            continue
+        heap.append((height[i], i))
+        visited[i] = True
+    heapify(heap)
+    # visit cells
+    max_height = 0
+    water = 0
+    while heap:
+        h, i = heappop(heap)
+        if h > max_height:
+            max_height = h
+        else:
+            water += max_height - h
+        for neighbour in (i-1, i+1):
+            if neighbour not in range(n):
+                continue
+            if not visited[neighbour]:
+                heappush(heap, (height[neighbour], neighbour))
+                visited[neighbour] = True
+    return water
 
 class Solution:
     def trap(self, height):
@@ -36,5 +62,4 @@ class Solution:
         :type height: List[int]
         :rtype: int
         """
-        return trap_water(height)
-
+        return trap_water_v3(height)

@@ -1,14 +1,19 @@
 # https://leetcode.com/problems/trapping-rain-water-ii/description/
 
+# Hint: BFS
+
+def trap_water_v1(heights):
+    from heapq import heapify, heappush, heappop
+    #
+    m, n = len(heights), len(heights[0])
+    heap = []
+    visited = [[False] * n for _ in range(m)]
+    
+
 class Solution:
     def trapRainWater(self, heights):
         """
         :type heights: List[List[int]]
         :rtype: int
         """
-        m, n = len(heights), len(heights[0])
-        upper = [[0] * n for _ in range(m)]
-        lower = [[n-1] * n for _ in range(m)]
-        left = [[0] * n for _ in range(m)]
-        right = [[n-1] * n for _ in range(m)]
-        
+        return trap_water_v1(heights)
