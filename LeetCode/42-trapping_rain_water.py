@@ -32,7 +32,7 @@ def trap_water_v3(height):
     n = len(height)
     heap = []
     visited = [False] * n
-    # add borders
+    # visit borders
     for i in (0, n-1):
         if i not in range(n):
             continue
@@ -48,12 +48,12 @@ def trap_water_v3(height):
             max_height = h
         else:
             water += max_height - h
-        for neighbour in (i-1, i+1):
-            if neighbour not in range(n):
+        for ni in (i-1, i+1):
+            if ni not in range(n):
                 continue
-            if not visited[neighbour]:
-                heappush(heap, (height[neighbour], neighbour))
-                visited[neighbour] = True
+            if not visited[ni]:
+                heappush(heap, (height[ni], ni))
+                visited[ni] = True
     return water
 
 class Solution:
