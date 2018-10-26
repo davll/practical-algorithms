@@ -1,7 +1,7 @@
 # Trie
 
 from bisect import bisect_right
-from sys import stderr
+#from sys import stderr
 
 class Trie:
     def __init__(self):
@@ -15,7 +15,7 @@ class Trie:
         for c in s:
             # find a child with key = c
             i = bisect_right(node.children_keys, c)
-            print("c = %s, i = %d" % (c,i), file = stderr)
+            #print("c = %s, i = %d" % (c,i), file = stderr)
             if i > 0 and node.children_keys[i-1] == c:
                 # found
                 node = node.children[i-1]
