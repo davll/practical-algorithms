@@ -6,6 +6,8 @@ class Mode(Enum):
     DEFAULT = 0
     LOWER_BOUND = 1
     UPPER_BOUND = 2
+    GREATER = 3
+    LESS = 4
 
 T = TypeVar('T', bound=Comparable)
 
@@ -20,17 +22,21 @@ def bsearch(func: Callable[[int], T], l: int, r: int, key: T, mode: Mode = Mode.
     while l <= r:
         m = (l + r) // 2
         k = func(m)
-        if key == k:
+        if k == key:
             result = m
             if mode == Mode.DEFAULT:
                 break
-            elif mode == Mode.LOWER_BOUND:
+            elif mode == Mode.LOWER_BOUND or mode == Mode.GREATER:
                 r = m-1
-            elif mode == Mode.UPPER_BOUND:
+            elif mode == Mode.UPPER_BOUND or mode == Mode.LESS:
                 l = m+1
-        elif key < k:
+        elif k > key:
+            if mode == Mode.GREATER:
+                result = m
             r = m-1
-        else: # key > k
+        else: # k < key
+            if mode == Mode.LESS:
+                result = m
             l = m+1
     return result
 
