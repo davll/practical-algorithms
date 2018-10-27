@@ -8,11 +8,14 @@ def items_for_days(machines, days):
 
 def minimumTime(machines, goal):
     machines.sort()
+    # lower bound
     l = (goal * machines[0]) // len(machines)
+    # upper bound
     r = (goal * machines[-1] + len(machines)-1) // len(machines)
     ans = -1
     # O( n * log(goal * max(machine) / n) )
     while l <= r:
+        # guess number of days
         m = (l + r) // 2
         #stderr.write("L = {l}, R = {r}, M = {m}\n".format(l=l, r=r, m=m))
         # O(n)
