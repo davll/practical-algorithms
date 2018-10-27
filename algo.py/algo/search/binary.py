@@ -20,22 +20,22 @@ def bsearch(func: Callable[[int], T], l: int, r: int, target: T, mode: Mode = Mo
     while l <= r:
         m = (l + r) // 2
         k = func(m)
-        if target = k:
+        if target == k:
             result = m
             if mode == Mode.DEFAULT:
                 break
-            elif mode == Mode.LOWER_BOUND or mode == Mode.GREATER:
+            elif mode == Mode.LOWER_BOUND or mode == Mode.RIGHT:
                 r = m-1
-            elif mode == Mode.UPPER_BOUND or mode == Mode.LESS:
+            elif mode == Mode.UPPER_BOUND or mode == Mode.LEFT:
                 l = m+1
         elif target < k:
             # ... target ... k ...
-            if mode == Mode.GREATER:
+            if mode == Mode.RIGHT:
                 result = m
             r = m-1
         else: # k < target
             # ... k ... target ...
-            if mode == Mode.LESS:
+            if mode == Mode.LEFT:
                 result = m
             l = m+1
     return result

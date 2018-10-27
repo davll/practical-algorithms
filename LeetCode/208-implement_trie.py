@@ -15,21 +15,26 @@ class Trie:
             # search children
             l, r = 0, len(node.children)-1
             next_node = None
+            pos = r+1
             while l <= r:
                 m = (l+r)//2
                 child = node.children[m]
                 if child.char == c:
                     next_node = child
+                    pos = m
                     break
                 elif child.char < c:
                     l = m+1
                 else:
                     r = m-1
+                    pos = m
             if next_node:
                 node = next_node
             else:
-                # TODO: add new node
-        # TODO: mark last node with end_of_word=True
+                next_node = Node(c)
+                node.children.insert(pos, next_node)
+                node = next_node
+        node.end_of_word = True
     def search(self, word):
         """
         Returns if the word is in the trie.
@@ -44,7 +49,7 @@ class Trie:
         :type prefix: str
         :rtype: bool
         """
-        node = self._find(word)
+        node = self._find(prefix)
         return bool(node)
     def _find(self, pattern):
         node = self.root
