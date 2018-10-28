@@ -9,47 +9,47 @@ def _make_func(seq_or_func: Union[Sequence[T], Callable[[int], T]]) -> Callable[
     else:
         return lambda i: seq_or_func[i]
 
-def binary_search(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int, last: int, target: T) -> Optional[int]:
-    """Find the element in the range [first, last] with its value = target"""
+def binary_search(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int, end: int, target: T) -> Optional[int]:
+    """Find the element in the range [first, end) with its value = target"""
     func = _make_func(seq_or_func)
-    while first <= last:
-        mid = (first + last) // 2
+    while first < end:
+        mid = (first + end) // 2
         value = func(mid)
         if target == value:
             # the target is right on mid
             return mid
         elif target < value:
             # the target is on the left of mid
-            last = mid - 1
+            end = mid
         else:
             # the target is on the right of mid
             first = mid + 1
     return None
 
-def lower_bound(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int, last: int, target: T) -> Optional[int]:
-    """Find the first element in the range [first, last] with its value >= target"""
+def lower_bound(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int, end: int, target: T) -> Optional[int]:
+    """Find the first element in the range [first, end) with its value >= target"""
     func = _make_func(seq_or_func)
-    result = last+1
-    while first <= last:
-        mid = (first + last) // 2
+    result = end
+    while first < end:
+        mid = (first + end) // 2
         value = func(mid)
         if target <= value:
             result = mid
-            last = mid - 1
+            end = mid
         else:
             first = mid + 1
     return result
 
-def upper_bound(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int, last: int, target: T) -> Optional[int]:
-    """Find the first element in the range [first, last] with its value > target"""
+def upper_bound(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int, end: int, target: T) -> Optional[int]:
+    """Find the first element in the range [first, end) with its value > target"""
     func = _make_func(seq_or_func)
-    result = last+1
-    while first <= last:
-        mid = (first + last) // 2
+    result = end
+    while first < end:
+        mid = (first + end) // 2
         value = func(mid)
         if target < value:
             result = mid
-            last = mid - 1
+            end = mid
         else:
             first = mid + 1
     return result
