@@ -38,14 +38,27 @@ def longest_palindrome_v2(text):
 # Idea: Manacher's Algorithm
 def longest_palindrome_v3(text):
     from itertools import chain
-    s = '#'.join(chain('^', s, '$')
+    s = '#'.join(chain('^', text, '$'))
     n = len(s)
+    # p[i] = 
     p = [0] * n
-    c, r = 0, 0
+    center, right = 0, 0
     for i in range(1, n-1):
-        j = 2 * c - i
-        p[i] = min(r-i, p[j]) if r > i else 0
-        #while s
+        j = 2 * center - i
+        if right > i:
+            p[i] = min(right-i, p[j])
+        # attempt to expand palindrome centered at i
+        while s[i+1+p[i]] == s[i-1-p[i]]:
+            p[i] += 1
+        # if palindrome centered at i expand past `right`,
+        # adjust center based on expanded palindrome.
+        if i + p[i] > right:
+            center = i
+            right = i + p[i]
+    # find the max element in `p`
+    center, maxlen = max(enumerate(p), key=lambda t: t[1])
+    start = (center-1-maxlen) // 2
+    return text[start:start+maxlen]
 
 class Solution:
     def longestPalindrome(self, s):
@@ -55,6 +68,6 @@ class Solution:
         """
         if not s:
             return ""
-        return longest_palindrome_v1(s)
+        return longest_palindrome_v3(s)
         
 # http://www.cnblogs.com/grandyang/p/4475985.html
