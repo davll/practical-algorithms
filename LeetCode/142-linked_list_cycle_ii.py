@@ -4,6 +4,21 @@
 #         self.val = x
 #         self.next = None
 
+# Tortoise Hare Algorithm
+#
+# suppose `a` is the length of the path from start to cycle,
+#         `c` is the length of the cycle
+#
+# the tortoise will meet the hare at the location (a + (c - (a mod c)))
+#
+#               ------|
+#               |     |
+#               |     |
+#  S ---------- E -----
+#
+#  a = |S - E|, c = |the cycle|
+#
+
 def detect_cycle(head):
     slow, fast = head, head
     cycle = False

@@ -1,45 +1,64 @@
 from typing import Optional, Callable, Sequence, TypeVar, Union
 from ..ty import Comparable
-from enum import Enum
-
-class Mode(Enum):
-    DEFAULT = 0
-    LOWER_BOUND = 1
-    UPPER_BOUND = 2
-    GREATER = 3
-    LESS = 4
 
 T = TypeVar('T', bound=Comparable)
 
-def bsearch(func: Callable[[int], T], l: int, r: int, key: T, mode: Mode = Mode.DEFAULT) -> Optional[int]:
-    """
-    func
-    l: lower bound (ex: 0)
-    r: upper bound (ex: N-1)
-    key: target key
-    """
-    result = None
-    while l <= r:
-        m = (l + r) // 2
-        k = func(m)
-        if k == key:
-            result = m
-            if mode == Mode.DEFAULT:
-                break
-            elif mode == Mode.LOWER_BOUND or mode == Mode.GREATER:
-                r = m-1
-            elif mode == Mode.UPPER_BOUND or mode == Mode.LESS:
-                l = m+1
-        elif k > key:
-            if mode == Mode.GREATER:
-                result = m
-            r = m-1
-        else: # k < key
-            if mode == Mode.LESS:
-                result = m
-            l = m+1
+def _make_func(seq_or_func: Union[Sequence[T], Callable[[int], T]]) -> Callable[[int], T]:
+    if callable(seq_or_func):
+        return seq_or_func
+    else:
+        return lambda i: seq_or_func[i]
+
+def binary_search(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int, end: int, target: T) -> Optional[int]:
+    """Find the element in the range [first, end) with its value = target"""
+    func = _make_func(seq_or_func)
+    while first < end:
+        mid = (first + end) // 2
+        value = func(mid)
+        if target == value:
+            # the target is right on mid
+            return mid
+        elif target < value:
+            # the target is on the left of mid
+            end = mid
+        else:
+            # the target is on the right of mid
+            first = mid + 1
+    return None
+
+def lower_bound(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int, end: int, target: T) -> Optional[int]:
+    """Find the first element in the range [first, end) with its value >= target"""
+    func = _make_func(seq_or_func)
+    result = end
+    while first < end:
+        mid = (first + end) // 2
+        value = func(mid)
+        if target <= value:
+            result = mid
+            end = mid
+        else:
+            first = mid + 1
+    return result
+
+def upper_bound(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int, end: int, target: T) -> Optional[int]:
+    """Find the first element in the range [first, end) with its value > target"""
+    func = _make_func(seq_or_func)
+    result = end
+    while first < end:
+        mid = (first + end) // 2
+        value = func(mid)
+        if target < value:
+            result = mid
+            end = mid
+        else:
+            first = mid + 1
     return result
 
 # References:
 # https://github.com/python/cpython/blob/3.7/Lib/bisect.py
 # https://ai.googleblog.com/2006/06/extra-extra-read-all-about-it-nearly.html
+# http://www.cplusplus.com/reference/algorithm/binary_search/
+# http://www.cplusplus.com/reference/algorithm/lower_bound/
+# http://www.cplusplus.com/reference/algorithm/upper_bound/
+# https://en.cppreference.com/w/cpp/algorithm/lower_bound
+# https://www.geeksforgeeks.org/lower_bound-in-cpp/

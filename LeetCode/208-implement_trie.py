@@ -1,13 +1,15 @@
-# Trie
-
 class Trie:
     def __init__(self):
-        self._root = Node(None)
-    @property
-    def root(self):
-        return self._root
-    #
+        """
+        Initialize your data structure here.
+        """
+        self.root = Node(None)
     def insert(self, word):
+        """
+        Inserts a word into the trie.
+        :type word: str
+        :rtype: void
+        """
         node = self.root
         for c in word:
             # search children
@@ -33,10 +35,20 @@ class Trie:
                 node.children.insert(pos, next_node)
                 node = next_node
         node.end_of_word = True
-    def has_word(self, word):
+    def search(self, word):
+        """
+        Returns if the word is in the trie.
+        :type word: str
+        :rtype: bool
+        """
         node = self._find(word)
         return bool(node) and node.end_of_word
-    def has_prefix(self, prefix):
+    def startsWith(self, prefix):
+        """
+        Returns if there is any word in the trie that starts with the given prefix.
+        :type prefix: str
+        :rtype: bool
+        """
         node = self._find(prefix)
         return bool(node)
     def _find(self, pattern):
@@ -59,7 +71,6 @@ class Trie:
             if not node:
                 break
         return node
-    
 
 class Node:
     def __init__(self, char):
@@ -67,6 +78,10 @@ class Node:
         self.children = []
         self.end_of_word = False
     def __repr__(self):
-        return "TrieNode({c})".format(c=self.char)
-    def __str__(self):
-        return str(self.char)
+        return str(self.key)
+
+# Your Trie object will be instantiated and called as such:
+# obj = Trie()
+# obj.insert(word)
+# param_2 = obj.search(word)
+# param_3 = obj.startsWith(prefix)

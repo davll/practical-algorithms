@@ -18,6 +18,11 @@
 #     `fast` should reach the end of the list before `slow`.
 #     Therefore, the two pointers never meet. QED
 #
+# Time Complexity: T = O(n)
+#
+#    For worst case, the tortoise reaches the cycle when the hare has just passed the same location.
+#    They will meet at the location in the cycle before the enter of the cycle
+#
 
 def check_cycle(head) -> bool:
     slow, fast = head, head
