@@ -50,13 +50,10 @@ class KmpSearch:
 # Boyer Moore
 
 # Rabin Karp
-
-# Bitap
-
-# Z algo
-# https://www.geeksforgeeks.org/z-algorithm-linear-time-pattern-searching-algorithm/
-
-# https://www.hackerearth.com/practice/algorithms/string-algorithm/string-searching/tutorial/
-
-if __name__ == "__main__":
-    pass
+def rabin_karp(text, pattern):
+    n, m = map(len, (text, pattern))
+    hp = hash(pattern)
+    for i in range(n-m+1):
+        s = text[i:i+m]
+        if hash(s) == hp and s == pattern:
+            yield i
