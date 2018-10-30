@@ -17,6 +17,14 @@ class NumArray:
         delta = val - self.arr[i]
         self.arr[i] = val
         self._update(i, delta)
+    def sumRange(self, i, j):
+        """
+        :type i: int
+        :type j: int
+        :rtype: int
+        """
+        return self._query(j) - self._query(i-1)
+    # update A[i]
     def _update(self, i, val):
         """
         :type i: int
@@ -28,20 +36,14 @@ class NumArray:
         while i <= n:
             self.fsum[i-1] += val
             i += _lsb(i)
-    def query(self, i):
+    # returns A[0] + ... + A[i]
+    def _query(self, i):
         i = i + 1
         result = 0
         while i >= 1:
-            result += self.fsum[i]
+            result += self.fsum[i-1]
             i -= _lsb(i)
         return result
-    def sumRange(self, i, j):
-        """
-        :type i: int
-        :type j: int
-        :rtype: int
-        """
-        return self.query(j) - self.query(i-1)
 
 def _lsb(x):
     return x & (-x)

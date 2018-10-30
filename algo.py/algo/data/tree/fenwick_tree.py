@@ -42,13 +42,14 @@ from typing import TypeVar, List, Sequence, Generic
 T = TypeVar('T', int, float)
 
 class FenwickTree1D(Generic[T]):
-    def __init__(self, nums: Sequence[T]) -> None:
-        n = len(nums)
+    def __init__(self, n: int) -> None:
+        self._size = n
         self._tree: List[T] = [0] * n
-        for i, x in enumerate(nums):
-            self.update(i, x)
-    # returns sum(A[0:i])
+    def __len__(self):
+        return self._size
+    # returns A[0] + ... + A[i]
     def query(self, i: int) -> T:
+        i = i + 1
         result: T = 0
         # traverse ancestors
         while i > 0:
@@ -70,36 +71,42 @@ class FenwickTree1D(Generic[T]):
 def _lsb(x: int) -> int:
     return x & (-x)
 
-#
-# =======================================
-#
-# 2D Binary Index Tree
-#
-
-def ft2d_zeros(m, n):
-    return [[0] * n for _ in range(m)]
-
-# sum of A[0:i+1,0:j+1]
-def ft2d_query(ft, i, j):
-    i, j = i+1, j+1
-    result, s_j = 0, j
-    while i > 0:
-        j = s_j
-        while j > 0:
-            result += ft[i-1][j-1]
-            j -= _lsb(j)
-        i -= _lsb(i)
-    return result
-
-# update A[i,j]
-def ft2d_update(ft, i, j, val):
-    m, n, i, j, s_j = len(ft), len(ft[0]), i+1, j+1, j+1
-    while i <= m:
-        j = s_j
-        while j <= n:
-            ft[i-1][j-1] += val
-            j += _lsb(j)
-        i += _lsb(i)
+class FenwickTree2D(Generic[T]):
+    def __init__(self, m: int, n: int) -> None:
+        self._rows = m
+        self._cols = n
+        self._tree: List[List[T]] = [[0] * n for _ in range(m)]
+    @property
+    def rows(self) -> int:
+        return self._rows
+    @property
+    def cols(self) -> int:
+        return self._cols
+    # update A[i][j]
+    def update(self, i, j, delta):
+        m, n = self.rows, self.cols
+        i, j = i+1, j+1
+        i0, j0 = i, j
+        while i <= m:
+            j = j0
+            while j <= n:
+                self._tree[i-1][j-1] += delta
+                j += _lsb(j)
+            i += _lsb(i)
+    # returns A[0][0] + ... + A[0][j] +
+    #           ...            ...    +
+    #         A[i][0] + ... + A[i][j]
+    def query(self, i, j):
+        i, j = i+1, j+1
+        i0, j0 = i, j
+        result = 0
+        while i > 0:
+            j = j0
+            while j > 0:
+                result += self._tree[i-1][j-1]
+                j -= _lsb(j)
+            i -= _lsb(i)
+        return result
 
 # References:
 #
