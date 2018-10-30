@@ -3,19 +3,30 @@ class NumArray:
         """
         :type nums: List[int]
         """
-        self.fsum = [0] * (len(nums)+1)
+        self.arr = nums
+        self.size = len(nums)
+        self.fsum = [0] * self.size
         for i, x in enumerate(nums):
-            self.update(i, x)
+            self._update(i, x)
     def update(self, i, val):
         """
         :type i: int
         :type val: int
         :rtype: void
         """
-        n = len(self.fsum)
+        delta = val - self.arr[i]
+        self.arr[i] = val
+        self._update(i, delta)
+    def _update(self, i, val):
+        """
+        :type i: int
+        :type val: int
+        :rtype: void
+        """
+        n = self.size
         i = i + 1
         while i <= n:
-            self.fsum[i] += val
+            self.fsum[i-1] += val
             i += _lsb(i)
     def query(self, i):
         i = i + 1

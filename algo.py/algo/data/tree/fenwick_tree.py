@@ -37,43 +37,38 @@
 #
 # https://visualgo.net/bn/fenwicktree
 
-from typing import TypeVar, List
+from typing import TypeVar, List, Sequence, Generic
 
 T = TypeVar('T', int, float)
 
-def ft_zeros(n: int) -> List[T]:
-    return [0] * n
-
-def ft_init(arr: List[T]) -> List[T]:
-    ft: List[T] = ft_zeros(len(arr))
-    for (i, a) in enumerate(arr):
-        ft_update(ft, i, a)
-    return ft
+class FenwickTree1D(Generic[T]):
+    def __init__(self, nums: Sequence[T]) -> None:
+        n = len(nums)
+        self._tree: List[T] = [0] * n
+        for i, x in enumerate(nums):
+            self.update(i, x)
+    # returns sum(A[0:i])
+    def query(self, i: int) -> T:
+        result: T = 0
+        # traverse ancestors
+        while i > 0:
+            # add current element to result
+            result += self._tree[i-1]
+            # move index to parent node in sum view
+            i -= _lsb(i)
+        return result
+    # update A[i]
+    def update(self, i: int, delta: T) -> None:
+        n, i = len(self._tree), i+1
+        # traverse all ancestors
+        while i <= n:
+            # add val to current node
+            self._tree[i-1] += delta
+            # move index to parent node in update view
+            i += _lsb(i)
 
 def _lsb(x: int) -> int:
     return x & (-x)
-
-# returns sum of A[0:i+1]
-def ft_query(ft: List[T], i: int) -> T:
-    i = i+1
-    result: T = 0
-    # traverse ancestors
-    while i > 0:
-        # add current element to result
-        result += ft[i-1]
-        # move index to parent node in sum view
-        i -= _lsb(i)
-    return result
-
-# update A[i]
-def ft_update(ft: List[T], i: int, val: T) -> None:
-    n, i = len(ft), i+1
-    # traverse all ancestors
-    while i <= n:
-        # add val to current node
-        ft[i-1] += val
-        # move index to parent node in update view
-        i += _lsb(i)
 
 #
 # =======================================
