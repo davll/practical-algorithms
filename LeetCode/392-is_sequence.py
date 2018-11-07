@@ -18,6 +18,7 @@ def is_subseq_v1(S, T):
 def is_subseq_v2(S, T):
     m, n = len(S), len(T)
     i = 0
+    # Time = O(N)
     for j in range(n):
         if i == m:
             return True
@@ -27,7 +28,34 @@ def is_subseq_v2(S, T):
 
 # Idea: Binary Search
 def is_subseq_v3(S, T):
-    raise NotImplementedError()
+    def upper_bound(arr, l, r, t):
+        ans = r
+        while l < r:
+            m = (l+r) // 2
+            k = arr[m]
+            if t < k:
+                ans = m
+                r = m
+            else:
+                l = m+1
+        return ans
+    # M = len(S), N = len(T)
+    # Space = O(N)
+    pos = [[] for _ in range(26)]
+    # Time = O(N)
+    for i, c in enumerate(T):
+        c = ord(c) - ord('a')
+        pos[c].append(i)
+    # Time = O(M * log(N))
+    idx = -1
+    for i, c in enumerate(S):
+        c = ord(c) - ord('a')
+        j = upper_bound(pos[c], 0, len(pos[c]), idx)
+        if j < len(pos[c]):
+            idx = pos[c][j]
+        else:
+            return False
+    return True
 
 class Solution(object):
     def isSubsequence(self, s, t):
@@ -40,4 +68,4 @@ class Solution(object):
             return True
         if not t:
             return False
-        return is_subseq_v2(s, t)
+        return is_subseq_v3(s, t)
