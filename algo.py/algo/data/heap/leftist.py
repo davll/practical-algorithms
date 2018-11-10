@@ -3,13 +3,13 @@
 class LeftistHeap:
     def __init__(self):
         self._root = None
-    #
+    # T = O(1)
     def peak(self):
         if self._root:
             return self._root.key
         else:
             return None
-    #
+    # T = O(log(n))
     def pop(self):
         if self._root:
             node = self._root
@@ -17,11 +17,11 @@ class LeftistHeap:
             return node.key
         else:
             return None
-    #
+    # T = O(log(n))
     def push(self, key):
         node = Node(key)
         self._root = _meld_trees(self._root, node)
-    #
+    # T = O(log(n))
     def meld(self, other):
         self._root = _meld_trees(self._root, other._root)
         other._root = None
@@ -31,6 +31,7 @@ class Node:
         self.key = key
         self.left = None
         self.right = None
+        # shortest <= log2(n+1)
         self.shortest = 1
 
 def _meld_trees(a, b):

@@ -3,10 +3,10 @@
 class BinomialHeap:
     def __init__(self):
         self._forest = []
-    #
+    # T = O(log(n))
     def peak(self):
         return min(map(lambda t: t.key, filter(bool, self._forest)))
-    #
+    # T = O(log(n)) amortized
     def pop(self):
         tree = min(filter(bool, self._forest), key=lambda t: t.key)
         tmp = tree.key
@@ -14,11 +14,11 @@ class BinomialHeap:
         for t in _extract_siblings(tree.child):
             self._forest = _forest_append(self._forest, t)
         return tmp
-    #
+    # T = O(1) amortized
     def push(self, key):
         tree = Node(key)
         self._forest = _forest_append(self._forest, tree)
-    #
+    # 
     def merge(self, other):
         for t in filter(bool, other._forest):
             self._forest = _forest_append(self._forest, t)
@@ -30,6 +30,7 @@ class Node:
         self.key = key
         self.child = None
         self.sibling = None
+        # order <= log2(n)
         self.order = 0
 
 # Note: the sibling list is ordered from high order to low order
