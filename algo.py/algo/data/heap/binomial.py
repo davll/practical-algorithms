@@ -1,107 +1,63 @@
 # Binomial Heap
 
-# operations
-# - create
-# - peak
-# - push
-# - pop
-# - decreasing a key => hash?
-# - remove node => hash?
+class BinomialHeap:
+    def __init__(self):
+        self._forest = []
+    #
+    def peak(self):
+        return min(map(lambda t: t.key, filter(bool, self._forest)))
+    #
+    def pop(self):
+        tree = min(filter(bool, self._forest), key=lambda t: t.key)
+        tmp = tree.key
+        self._forest[tree.order] = None
+        for t in _extract_siblings(tree.child):
+            self._forest = _forest_append(self._forest, t)
+        return tmp
+    #
+    def push(self, key):
+        tree = Node(key)
+        self._forest = _forest_append(self._forest, tree)
+    #
+    def merge(self, other):
+        for t in filter(bool, other._forest):
+            self._forest = _forest_append(self._forest, t)
+        other._forest = []
 
+# Tree node
 class Node:
     def __init__(self, key):
         self.key = key
-        self.sibling = None
         self.child = None
-        self.parent = None
-        self.order = 1
+        self.sibling = None
+        self.order = 0
 
-def _merge_tree(root0, root1):
-    assert root0.order == root1.order
-    assert not root0.parent
-    assert not root1.parent
-    assert not root0.sibling
-    assert not root1.sibling
-    if root0.key < root1.key:
-        root1.sibling = root0.child
-        root0.child = root1
-        root1.parent = root0
-        root0.order += 1
-        return root0
-    else:
-        root0.sibling = root1.child
-        root1.child = root0
-        root0.parent = root1
-        root1.order += 1
-        return root1
+# Note: the sibling list is ordered from high order to low order
+def _join_tree(a, b):
+    assert a.order == b.order
+    assert not a.sibling
+    assert not b.sibling
+    if a.key > b.key:
+        a, b = b, a
+    b.sibling = a.child
+    a.child = b
+    a.order += 1
+    return a
 
-# returns (tree, forest)
-def _extract_tree(forest):
-    tmp, forest.sibling = forest.sibling, None
-    return (forest, tmp)
+def _extract_siblings(tree):
+    while tree:
+        tmp = tree.sibling
+        tree.sibling = None
+        yield tree
+        tree = tmp
 
-# returns tail
-def _push_tree(tail, tree):
-    assert tail.order < tree.order
-    assert not tail.sibling
-    assert not tree.sibling
-    tail.sibling = tree
-    return tree
-
-def _merge_forest(forest0, forest1):
-    dummy = Node(0)
-    dummy.order = -1
-    head = tail = dummy
-    carry = None
-    while forest0 and forest1:
-        if carry:
-            assert carry.order <= forest0.order
-            assert carry.order <= forest1.order
-            if carry.order < forest0.order and carry.order < forest1.order:
-                tail = _push_tree(tail, carry)
-                carry = None
-        if forest0.order == forest1.order:
-            tree0, forest0 = _extract_tree(forest0)
-            tree1, forest1 = _extract_tree(forest1)
-            if carry:
-                tail = _push_tree(tail, carry)
-            carry = _merge_tree(tree0, tree1)
-        elif forest0.order < forest1.order:
-            tree0, forest0 = _extract_tree(forest0)
-            if carry:
-                if carry.order < tree0.order:
-                    tail = _push_tree(tail, carry)
-                    carry = tree0
-                else:
-                    carry = _merge_tree(tree0, carry)
-            else:
-                tail = _push_tree(tail, tree0)
-        else:
-            # TODO
-            pass
-    if forest0:
-        assert tail.order <= forest0.order
-        assert not tail.sibling
-        tail.sibling = forest0
-    elif forest1:
-        assert tail.order <= forest1.order
-        assert not tail.sibling
-        tail.sibling = forest1
-    assert head.order < 0
-    return head.sibling
-
-def _shiftup(node):
-    while node and node.parent and node.key < node.parent.key:
-        node.key, node.parent.key = node.parent.key, node.key
-        node = node.parent
-
-def _find_min(forest):
-    if not forest:
-        return None
-    result = forest.key
-    forest = forest.sibling
-    while forest:
-        if result > forest.key:
-            result = forest.key
-        forest = forest.sibling
-    return result
+def _forest_append(forest, tree):
+    d = tree.order
+    while d < len(forest) and forest[d]:
+        tree = _join_tree(tree, forest[d])
+        forest[d] = None
+        d += 1
+    if d >= len(forest):
+        forest += [None] * (d+1 - len(forest))
+    forest[d] = tree
+    return forest
