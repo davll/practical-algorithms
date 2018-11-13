@@ -65,10 +65,52 @@ def dist_candy_v2(scores):
             m2[i] = 1
     return sum(map(max, zip(m1, m2)))
 
+# Idea: Single Pass
+#
+# => Count how many ascending points and descending points
+#
+def dist_candy_v3(scores):
+    n = len(scores)
+    if n <= 1:
+        return n
+    candies = 0
+    ascend, descend = 0, 0
+    old_slope = 0
+    for i in range(1, n):
+        slope = compute_slope(scores, i-1, i)
+        if (old_slope > 0 and slope == 0) or (old_slope < 0 and slope >= 0):
+            candies += sum_from_1_to(ascend)
+            candies += sum_from_1_to(descend)
+            candies += max(ascend, descend)
+            ascend, descend = 0, 0
+        if slope > 0:
+            ascend += 1
+        if slope < 0:
+            descend += 1
+        if slope == 0:
+            candies += 1
+        old_slope = slope
+    candies += sum_from_1_to(ascend)
+    candies += sum_from_1_to(descend)
+    candies += max(ascend, descend)
+    candies += 1
+    return candies
+
+def sum_from_1_to(n):
+    return (n * (n+1)) // 2
+
+def compute_slope(nums, i, j):
+    if nums[i] < nums[j]:
+        return 1
+    elif nums[i] > nums[j]:
+        return -1
+    else:
+        return 0
+
 class Solution:
     def candy(self, ratings):
         """
         :type ratings: List[int]
         :rtype: int
         """
-        return dist_candy_v2(ratings)
+        return dist_candy_v3(ratings)
