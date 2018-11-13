@@ -1,4 +1,5 @@
 from collections import deque
+from heapq import heappush, heappop
 
 # Hint: Amortized O(n)
 
@@ -30,6 +31,20 @@ def max_sliding_window_v1(nums, k):
             result.append(nums[queue[0]])
     return result
 
+def max_sliding_window_v2(nums, k):
+    heap = []
+    result = []
+    for i in range(len(nums)):
+        # drain overflow indices
+        while heap and heap[0][1] <= i-k:
+            heappop(heap)
+        # push current
+        heappush(heap, (-nums[i], i))
+        # emit current maximal value
+        if i >= k-1:
+            result.append(-heap[0][0])
+    return result
+
 class Solution:
     def maxSlidingWindow(self, nums, k):
         """
@@ -37,4 +52,4 @@ class Solution:
         :type k: int
         :rtype: List[int]
         """
-        return max_sliding_window_v1(nums, k)
+        return max_sliding_window_v2(nums, k)
