@@ -20,14 +20,17 @@ def search_v1(nums, target):
 def find_min_v1(nums):
     n = len(nums)
     l, r = 0, n-1
-    while l <= r:
+    while l < r:
         m = (l + r) // 2
         if nums[m] > nums[r]:
             l = m+1
         elif nums[m] < nums[r]:
             r = m
         else:
-            r = r-1
+            while l < r and nums[m] == nums[r-1]:
+                r -= 1
+            while l < r and nums[m] == nums[l]:
+                l += 1
     return l
 
 class Solution:
