@@ -25,7 +25,7 @@ def bfs_v1(graph):
             return dist
         for child in graph[head]:
             cover2 = cover | (1 << child)
-            if dist +1 < distance[cover2, child]:
+            if dist + 1 < distance[cover2, child]:
                 distance[cover2, child] = dist + 1
                 queue.append((cover2, child))
 
