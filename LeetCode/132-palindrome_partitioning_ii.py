@@ -21,7 +21,7 @@
 #
 # C[0] = 0
 # C[i] = 0    if P[0][i] = True
-#        min { C[j] + 1 if P[j,i] = True } for all j in 0..i-1
+#        min { C[j] + 1 if P[j,i] = True } for all j in 0..i-1  
 #
 # => T = O(n^2)
 #
