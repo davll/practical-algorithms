@@ -7,9 +7,9 @@ class Solution:
         :rtype: int
         """
         # rectangle: (x1, y1, x2, y2) => (left, bottom, right, top)
-        return rect_area_v1(rectangles)
+        return rect_area_v2(rectangles)
 
-# Binary Search
+# Idea: Binary Search
 def rect_area_v1(rectangles):
     X = [x for x1, _, x2, _ in rectangles for x in (x1, x2)]
     X.sort()
@@ -48,8 +48,50 @@ def rect_area_v1(rectangles):
     return result % mod
 
 # Idea: Line Sweap
+#
+# Scan from bottom to top
+#
+def rect_area_v2(rectangles):
+    # compress coordinates
+    X = [x for x1, _, x2, _ in rectangles for x in (x1, x2)]
+    Y = [y for _, y1, _, y2 in rectangles for y in (y1, y2)]
+    X.sort()
+    Y.sort()
+    X = dedup(X)
+    Y = dedup(Y)
+    # build events from bottom to top, from left to right
+    OPEN, CLOSE = 1, -1
+    events = []
+    for x1, y1, x2, y2 in rectangles:
+        events.append((y1, OPEN, x1, x2))
+        events.append((y2, CLOSE, x1, x2))
+    events.sort(reverse = True)
+    # scan from bottom to top
+    MOD = 10 ** 9 + 7
+    result = 0
+    flags = [0] * len(X)
+    for i in range(len(Y)):
+        # compute the height
+        if i > 0:
+            h = Y[i] - Y[i-1]
+            for j in range(len(X)-1):
+                if not flags[j]:
+                    continue
+                w = X[j+1] - X[j]
+                result = (result + w * h) % MOD
+        # update intervals
+        while events and events[-1][0] == Y[i]:
+            _, kind, x1, x2 = events.pop()
+            l = bsearch(X, 0, len(X)-1, x1)
+            r = bsearch(X, 0, len(X)-1, x2)
+            for j in range(l, r):
+                flags[j] += kind
+    #
+    return result
 
 # Idea: Segment Tree
+def rect_area_v3(rectangles):
+    pass
 
 def bsearch(nums, l, r, t):
     while l <= r:
