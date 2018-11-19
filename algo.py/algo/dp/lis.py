@@ -16,7 +16,7 @@ def lis_v1(A):
     F = [1] * n
     for i in range(1, n):
         F[i] = max((F[j] + 1 for j in range(0, i) if A[j] < A[i]), default=1)
-    return max(F)
+    return max(F, default=0)
 
 # Idea: Greedy + Binary Search
 #
