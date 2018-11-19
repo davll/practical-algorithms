@@ -26,7 +26,7 @@ def binary_search(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: in
             first = mid + 1
     return None
 
-def lower_bound(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int, end: int, target: T) -> Optional[int]:
+def lower_bound(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int, end: int, target: T) -> int:
     """Find the first element in the range [first, end) with its value >= target"""
     func = _make_func(seq_or_func)
     result = end
@@ -40,7 +40,7 @@ def lower_bound(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int,
             first = mid + 1
     return result
 
-def upper_bound(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int, end: int, target: T) -> Optional[int]:
+def upper_bound(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int, end: int, target: T) -> int:
     """Find the first element in the range [first, end) with its value > target"""
     func = _make_func(seq_or_func)
     result = end
@@ -52,6 +52,13 @@ def upper_bound(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int,
             end = mid
         else:
             first = mid + 1
+    return result
+
+def floor_search(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int, end: int, target: T) -> Optional[int]:
+    """Find the last element in the range [first, end) with its value < target"""
+    func = _make_func(seq_or_func)
+    result = None
+    raise NotImplementedError()
     return result
 
 # References:

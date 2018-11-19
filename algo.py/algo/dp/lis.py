@@ -1,62 +1,60 @@
 # Longest Increasing Subsequence
-#
-# f(i): LIS of A[0:i+1] including A[i]
-#
-# f(i) = []                                    if i < 0
-#      = [A[0]]                                if i = 0
-#      = max {
-#            f(j) + [A[i]] for j in [0,i)      if A[j] < A[i],
-#            [A[i]]
-#        }                                     if i > 0
-#
 
-
-# O(n^2)
-def lis(A):
+# Idea: Dynamic Programming
+#
+# T = O(n^2)
+#
+# F[i] = Length of LIS ends at A[i]
+#
+# F[0] = 1
+#
+# F[i] = max { F[j]+1 } for all j < i st. A[j] < A[i]
+#      = 1              if no such j exists
+#
+def lis_v1(A):
     n = len(A)
-    sz = [1] * n
+    F = [1] * n
     for i in range(1, n):
-        l = 1
-        for j in range(0, i):
-            if A[j] < A[i]:
-                l = max(l, sz[j] + 1)
-        sz[i] = l
-    return max(sz)
+        F[i] = max((F[j] + 1 for j in range(0, i) if A[j] < A[i]), default=1)
+    return max(F)
 
-# O(nlogn)
-def lis2(A):
+# Idea: Greedy + Binary Search
+#
+# T = O(nlogn)
+#
+# active lists:
+#    [
+#      [],
+#      ...
+#      [..., A[tail[j]]]
+#    ]
+#
+# - j: length of an active list
+#
+# - tail[j]: the index of the smallest value A[k] such that it exists an
+#            increasing subsequence of length j ending at A[k] on the range
+#            k <= i
+#
+# - prev[k]: the index of the predecessor of A[k] in the LIS ending at A[k]
+#
+# See also: patience sorting
+#
+def lis_v2(A):
     n = len(A)
-    # After processing A[i]:
-    #
-    # tail[j]: the index k of the smallest value X[k] such that it exists an
-    #       increasing subsequence of length j ending at A[k] on the range
-    #       k <= i
-    #
-    # prev[k]: the index of the predecessor of A[k] in the LIS ending at A[k]
-    #
+    # Note: tail[0] is not used
     tail = [0] * (n+1)
     prev = [-1] * n
-    # Note: tail[0] is not used
     max_sz = 0
     for i in range(n):
-        # binary search for the largest positive j <= max_sz
+        # binary search for the largest positive 1 <= j <= max_sz
         # such that A[tail[j]] < A[i]
         #
         # note that A[tail[1]] ... A[tail[L]] is an increasing sequence
-        lo, hi = 1, max_sz
-        while lo <= hi:
-            mid = (lo + hi + 1) // 2
-            if A[tail[mid]] < A[i]:
-                lo = mid+1
-            else:
-                hi = mid-1
-        # lo is 1 greater than the length of the longest prefix of X[i]
-        new_sz = lo
-        # the predecessor of A[i] = the last index of the subsequence of length newL-1
-        prev[i] = tail[new_sz-1]
-        tail[new_sz] = i
-        if new_sz > max_sz:
-            max_sz = new_sz
+        j = ceil_search(lambda m: A[tail[m]], 1, max_sz, A[i])
+        # the predecessor of A[i] = the last index of the subsequence of length j-1
+        prev[i] = tail[j-1]
+        tail[j] = i
+        max_sz = max(max_sz, j)
     #
     # reconstruct the LIS
     # ls = []
@@ -67,3 +65,16 @@ def lis2(A):
     # ls.reverse()
     #
     return max_sz
+
+def ceil_search(func, l, r, target):
+    while l <= r:
+        m = (l + r + 1) // 2
+        if func(m) < target:
+            l = m+1
+        else:
+            r = m-1
+    return l
+
+# https://www.geeksforgeeks.org/longest-monotonically-increasing-subsequence-size-n-log-n/
+# https://www.geeksforgeeks.org/construction-of-longest-monotonically-increasing-subsequence-n-log-n/
+# https://stackoverflow.com/questions/2631726/how-to-determine-the-longest-increasing-subsequence-using-dynamic-programming
