@@ -1,6 +1,6 @@
 # https://leetcode.com/problems/number-of-longest-increasing-subsequence/
 
-# Idea: Dynamic Programming => TLE :(
+# Idea: Dynamic Programming => TLE
 #
 # C[k,i] = Number of k-length increasing subsequences ending at A[i]
 #
@@ -15,7 +15,7 @@ def num_lis_v1(A):
             C[k][i] = sum(C[k-1][j] for j in range(i) if A[j] < A[i])
     return sum(C[L])
 
-# Idea: Dynamic Programming => Improved
+# Idea: Dynamic Programming => Accepted
 #
 # L[i] = the length of LIS ending at A[i]
 # C[i] = the number of LIS ending at A[i]
@@ -37,6 +37,10 @@ def num_lis_v2(A):
                     C[i] += C[j]
     maxlen = max(L, default=0)
     return sum(map(lambda i: C[i], filter(lambda i: L[i] == maxlen, range(n))))
+
+# Idea: Segment Tree
+def num_lis_v3(A):
+    pass
 
 def lis(A):
     n = len(A)
