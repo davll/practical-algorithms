@@ -1,3 +1,6 @@
+# https://www.geeksforgeeks.org/hashing-set-1-introduction/
+# https://www.geeksforgeeks.org/hashing-set-2-separate-chaining/
+
 class HashTable:
     def __init__(self, num_buckets = 32):
         self._buckets = [None] * num_buckets
