@@ -1,99 +1,114 @@
-class Entry():
-    def __init__(self, key, hash, value):
-        self.key = key
-        self.hash = hash
-        self.value = value
-        self.next = None
-    def match(self, key, hash) -> bool:
-        return self.hash == hash and self.key == key
-
 class HashTable:
-    def __init__(self, hash=hash) -> None:
-        self._head = [None] * 64
+    def __init__(self, num_buckets = 32):
+        self._buckets = [None] * num_buckets
         self._hash = hash
-        self._load_factor = 0.75
         self._count = 0
+        self._load_factor = 0.75
     #
-    def __contains__(self, key) -> bool:
-        return bool(self._find(key))
+    def __contains__(self, key):
+        code = self._hash(key)
+        i = self._bucket_index(code)
+        node = _ll_find(self._buckets[i], key, code)
+        return bool(node)
     #
-    def get(self, key, default=None):
-        h = self._hash(key)
-        i = h % len(self._head)
-        #
-        node = self._head[i]
-        while node and not node.match(key, h):
-            node = node.next
-        #
+    def __setitem__(self, key, value):
+        code = self._hash(key)
+        i = self._bucket_index(code)
+        node = _ll_find(self._buckets[i], key, code)
+        if node:
+            node.value = value
+        else:
+            node = Node(key, value, code)
+            self._buckets[i] = _ll_push(self._buckets[i], node)
+            self._count += 1
+            if self._need_rehash():
+                self._rehash(len(self._buckets) * 2)
+    #
+    def __getitem__(self, key, default=None):
+        code = self._hash(key)
+        i = self._bucket_index(code)
+        node = _ll_find(self._buckets[i], key, code)
         if node:
             return node.value
-        elif default:
+        elif default is not None:
             return default
         else:
             raise IndexError()
     #
-    def insert(self, key, value) -> None:
-        h = self._hash(key)
-        i = h % len(self._head)
-        #
-        node = self._head[i]
-        while node and not node.match(key, h):
-            node = node.next
-        #
+    def __delitem__(self, key):
+        code = self._hash(key)
+        i = self._bucket_index(code)
+        node, self._buckets[i] = _ll_extract(self._buckets[i], key, code)
         if node:
-            node.value = value
-        else:
-            node = Entry(key, h, value)
-            node.next = self._head[i]
-            self._head[i] = node
-            self._count += 1
-            if self._count / len(self._head) >= self._load_factor:
-                self._rehash()
-    #
-    def remove(self, key) -> None:
-        h = self._hash(key)
-        i = h % len(self._head)
-        #
-        node = self._head[i]
-        if not node:
-            raise IndexError()
-        elif node.match(key, h):
-            self._head[i] = node.next
             self._count -= 1
         else:
-            while node.next:
-                if node.next.match(key, h):
-                    node.next = node.next.next
-                    self._count -= 1
-                    return
-                else:
-                    node = node.next
             raise IndexError()
     #
-    def _rehash(self) -> None:
-        n = 2 * len(self._head)
-        new_head = [None] * n
-        for j, head in enumerate(self._head):
-            if not head:
-                continue
-            # extract node
-            node, self._head[j] = head, head.next
-            node.next = None
-            # add to new table
-            h = node.hash
-            i = h % n
-            node.next = new_head[i]
-            new_head[i] = node
-        self._head = new_head
+    def _bucket_index(self, code):
+        return code % len(self._buckets)
+    #
+    def _rehash(self, num_buckets):
+        buckets = [None] * num_buckets
+        for old_bucket in self._buckets:
+            while old_bucket:
+                node, old_bucket = _ll_pop(old_bucket)
+                i = node.code % num_buckets
+                buckets[i] = _ll_push(buckets[i], node)
+        self._buckets = buckets
+    #
+    def _need_rehash(self):
+        return self._count / len(self._buckets) >= self._load_factor
+
+class Node:
+    def __init__(self, key, value, code):
+        self.key = key
+        self.value = value
+        self.code = code
+        self.next = None
+
+# return root
+def _ll_push(root, node):
+    node.next = root
+    return node
+
+# return node
+def _ll_find(root, key, code):
+    while root:
+        if root.code == code and root.key == key:
+            break
+        root = root.next
+    return root
+
+# return (node, root)
+def _ll_extract(root, key, code):
+    prev, curr = None, root
+    while curr:
+        if curr.code == code and curr.key == key:
+            if prev:
+                prev.next, curr.next = curr.next, None
+            else:
+                root, curr.next = curr.next, None
+            return (curr, root)
+        prev, curr = curr, curr.next
+    return (None, root)
+
+# return (node, root)
+def _ll_pop(root):
+    if not root:
+        return (None, None)
+    tmp, root.next = root.next, None
+    return (root, tmp)
 
 if __name__ == "__main__":
-    import random
-    keys = list(range(128))
-    vals = list(map(lambda x: x**2, range(1,129)))
-    random.shuffle(keys)
-    random.shuffle(vals)
+    from random import shuffle
+    keys = list(range(1024))
+    vals = list(map(lambda x: x**2, range(1,1024+1)))
+    shuffle(keys)
+    shuffle(vals)
     ht = HashTable()
     for k, v in zip(keys, vals):
-        ht.insert(k, v)
+        ht[k] = v
     for k, v in zip(keys, vals):
-        assert v == ht.get(k)
+        assert k in ht
+        assert v == ht[k]
+        del ht[k]
