@@ -1,12 +1,4 @@
-# https://leetcode.com/problems/house-robber/description/
-
-# Idea: Dynamic Programming
-#
-# F[i] = maximum amount of money after robbing A[:i]
-#
-# F[0] = 0
-# F[i] = max(F[i-1], F[i-2] + A[i-1])
-#
+# https://leetcode.com/problems/house-robber-ii/
 
 def rob_v1(A):
     n = len(A)
@@ -21,4 +13,8 @@ class Solution:
         :type nums: List[int]
         :rtype: int
         """
-        return rob_v1(nums)
+        if not nums:
+            return 0
+        elif len(nums) == 1:
+            return nums[0]
+        return max(rob_v1(nums[:-1]), rob_v1(nums[1:]))

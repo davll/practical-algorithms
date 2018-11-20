@@ -1,3 +1,7 @@
+# https://leetcode.com/problems/sort-list/description/
+# https://leetcode.com/problems/sort-list/discuss/166324/c++-and-java-legit-solution.-O(nlogn)-time-and-O(1)-space!-No-recursion!-With-detailed-explaination
+# https://leetcode.com/problems/sort-list/discuss/195646/28ms-C++-no-recursion-O(1)-extra-space-cost-merge-sort
+
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, x):
@@ -43,11 +47,16 @@ def _split(ls):
         prev.next = None
     return (ls, slow)
 
-def merge_sort(head):
+# log(n) space
+def merge_sort_v1(head):
     if not head or not head.next:
         return head
-    l1, l2 = map(merge_sort, _split(head))
+    l1, l2 = map(merge_sort_v1, _split(head))
     return _merge(l1, l2)
+
+# constant space
+def merge_sort_v2(head):
+    raise NotImplementedError()
 
 class Solution:
     def sortList(self, head):
@@ -55,4 +64,4 @@ class Solution:
         :type head: ListNode
         :rtype: ListNode
         """
-        return merge_sort(head)
+        return merge_sort_v1(head)
