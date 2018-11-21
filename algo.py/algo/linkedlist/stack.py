@@ -1,3 +1,5 @@
+from . import Node
+
 class Stack:
     def __init__(self):
         self._top = None
@@ -31,8 +33,3 @@ class Stack:
         else:
             self._btm.next = stack._top
             self._btm = stack.btm
-
-class Node:
-    def __init__(self, val, next = None):
-        self.value = val
-        self.next = next

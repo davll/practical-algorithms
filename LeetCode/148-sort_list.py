@@ -8,34 +8,41 @@
 #         self.val = x
 #         self.next = None
 
-def _take(ls):
+def _pop_head(ls):
     # List -> (Node, List)
-    tmp = ls.next
-    ls.next = None
+    tmp, ls.next = ls.next, None
     return (ls, tmp)
 
 def _merge(l1, l2):
-    head, tail = None, None
-    # initialise head and tail
-    if l1 and (not l2 or l1.val <= l2.val):
-        head, l1 = _take(l1)
-    elif l2 and (not l1 or l1.val > l2.val):
-        head, l2 = _take(l2)
-    tail = head
-    # merge
+    head = tail = ListNode('dummy')
     while l1 and l2:
-        if l1.val <= l2.val:
-            node, l1 = _take(l1)
-            tail.next = node
-        else: #l1.val > l2.val
-            node, l2 = _take(l2)
-            tail.next = node
+        if l1.val < l2.val:
+            tmp, l1 = _pop_head(l1)
+        else:
+            tmp, l2 = _pop_head(l2)
+        tail.next = tmp
         tail = tail.next
     if l1:
         tail.next = l1
-    if l2:
+    elif l2:
         tail.next = l2
-    return head
+    return head.next
+
+def _merge_to_tail(tail, l1, l2):
+    while l1 and l2:
+        if l1.val < l2.val:
+            tmp, l1 = _pop_head(l1)
+        else:
+            tmp, l2 = _pop_head(l2)
+        tail.next = tmp
+        tail = tail.next
+    if l1:
+        tail.next = l1
+    elif l2:
+        tail.next = l2
+    while tail.next:
+        tail = tail.next
+    return tail
 
 def _split(ls):
     assert ls
@@ -47,6 +54,22 @@ def _split(ls):
         prev.next = None
     return (ls, slow)
 
+def _split_n(ls, n):
+    prev, curr = None, ls
+    while curr and n > 0:
+        prev, curr = curr, curr.next
+        n -= 1
+    if prev:
+        prev.next = None
+    return (ls, curr)
+
+def _length(ls):
+    n = 0
+    while ls:
+        n += 1
+        ls = ls.next
+    return n
+
 # log(n) space
 def merge_sort_v1(head):
     if not head or not head.next:
@@ -56,7 +79,17 @@ def merge_sort_v1(head):
 
 # constant space
 def merge_sort_v2(head):
-    raise NotImplementedError()
+    n = _length(head)
+    step = 1
+    while head and step < n:
+        tmp_head = tmp_tail = ListNode('dummy')
+        while head:
+            a, head = _split_n(head, step)
+            b, head = _split_n(head, step)
+            tmp_tail = _merge_to_tail(tmp_tail, a, b)
+        head = tmp_head.next
+        step *= 2
+    return head
 
 class Solution:
     def sortList(self, head):
@@ -64,4 +97,4 @@ class Solution:
         :type head: ListNode
         :rtype: ListNode
         """
-        return merge_sort_v1(head)
+        return merge_sort_v2(head)

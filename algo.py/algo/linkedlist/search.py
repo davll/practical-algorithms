@@ -1,10 +1,7 @@
-class Node:
-    def __init__(self, val, next = None):
-        self.value = val
-        self.next = next
+from . import Node
 
 # Floyd's Tortoise and Hare Algorithm
-def detect_cycle(head):
+def detect_cycle(head) -> bool:
     if not head:
         return False
     slow, fast = head, head
@@ -15,17 +12,12 @@ def detect_cycle(head):
             return True
     return False
 
-def items(head):
-    while head:
-        yield head.value
-        head.next
-
-def find_merge_point(head1, head2):
-    p1, p2 = head1, head2
-    while id(p1) != id(p2):
+def find_merge_point(h1, h2):
+    p1, p2 = h1, h2
+    while p1 and p2 and id(p1) != id(p2):
         p1, p2 = p1.next, p2.next
         if not p1:
-            p1 = head2
+            p1, h2 = h2, None
         if not p2:
-            p2 = head1
+            p2, h1 = h1, None
     return p1
