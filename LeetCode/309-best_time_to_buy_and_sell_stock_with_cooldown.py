@@ -3,7 +3,7 @@
 # Hint: Dynamic Programming
 # Hint: State Machine
 #
-# s0: initial state
+# s0: idle state
 # s1: bought state
 # s2: sold state
 #
@@ -12,11 +12,10 @@
 # s2[i] = s1[i-1] + prices[i]
 #
 # s0[0] = 0
-# s1[0] = -prices[i]
+# s1[0] = -prices[0]
 # s2[0] = 0
 #
-
-def max_profit(prices):
+def max_profit_v1(prices):
     n = len(prices)
     s0 = [-1] * n
     s1 = [-1] * n
@@ -38,4 +37,4 @@ class Solution:
         """
         if not prices:
             return 0
-        return max_profit(prices)
+        return max_profit_v1(prices)

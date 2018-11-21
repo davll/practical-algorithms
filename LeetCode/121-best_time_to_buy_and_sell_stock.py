@@ -8,7 +8,7 @@ def max_profit_v1(prices):
             result = max(result, profit)
     return result
 
-def max_profit(prices):
+def max_profit_v2(prices):
     from heapq import heappush
     n, result = len(prices), 0
     if n == 0:
@@ -20,10 +20,20 @@ def max_profit(prices):
         heappush(minheap, prices[i])
     return result
 
+def max_profit_v3(prices):
+    minprice = float('inf')
+    maxprofit = 0
+    for price in prices:
+        if price < minprice:
+            minprice = price
+        else:
+            maxprofit = max(maxprofit, price - minprice)
+    return maxprofit
+
 class Solution:
     def maxProfit(self, prices):
         """
         :type prices: List[int]
         :rtype: int
         """
-        return max_profit(prices)
+        return max_profit_v3(prices)
