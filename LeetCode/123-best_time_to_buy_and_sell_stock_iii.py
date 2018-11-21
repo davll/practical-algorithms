@@ -1,4 +1,6 @@
 # https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/
+# https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/discuss/135704/Detail-explanation-of-DP-solution
+# https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/discuss/149383/Easy-DP-solution-using-state-machine-O(n)-time-complexity-O(1)-space-complexity
 
 # Idea: Dynamic Programming
 #
