@@ -1,3 +1,5 @@
+# https://leetcode.com/problems/permutations/
+
 def permute_v1(nums):
     n = len(nums)
     buf = [-1] * n
@@ -24,10 +26,14 @@ def permute_v2(nums):
         perms2.clear()
     return perms
 
+def permute_v3(nums):
+    from itertools import permutations
+    return list(permutations(nums, len(nums)))
+
 class Solution:
     def permute(self, nums):
         """
         :type nums: List[int]
         :rtype: List[List[int]]
         """
-        return permute_v2(nums)
+        return permute_v3(nums)
