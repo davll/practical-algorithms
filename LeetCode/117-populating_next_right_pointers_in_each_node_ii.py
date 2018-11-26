@@ -11,7 +11,6 @@
 def left_child(root):
     if not root:
         return None
-    root = root.next
     while root:
         if root.left:
             return root.left
@@ -30,6 +29,9 @@ def conn_v1(root):
         root.right.next = nc
     conn_v1(root.right)
     conn_v1(root.left)
+
+def conn_v2(root):
+    pass
 
 class Solution:
     # @param root, a tree link node
