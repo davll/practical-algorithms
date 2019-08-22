@@ -1,23 +1,26 @@
 # https://leetcode.com/problems/scramble-string/
 
+#
+# F[l][i][j] : s1[i:i+l] & s2[j:j+l] are scramble
+#
+
 def is_scramble(s1, s2):
     assert len(s1) == len(s2)
-    if not s1:
-        return True
-    if len(s1) == 1:
-        return s1 == s2
-    if len(s1) == 2:
-        return s1 == s2 or (s1[0] == s2[1] and s1[1] == s2[0])
-    k = len(s1) // 2
-    a, b = s1[:k], s1[k:]
-    # case1: not swapped
-
+    n = len(s1)
+    F = [[[False] * n for _ in range(n)] for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            F[0][i][j] = s1[i] == s2[j]
+    for l in range(1,n):
+        for i in range(n-l):
+            for j in range(n-l):
+                tmp = False
+                for k in range(l):
+                    tmp = tmp or (F[k][i][j] and F[l-k-1][i+k+1][j+k+1])
+                    tmp = tmp or (F[k][i][j+l-k] and F[l-k-1][i+k+1][j])
+                F[l][i][j] = tmp
+    return F[-1][0][0]
 
 class Solution:
-    def isScramble(self, s1, s2):
-        """
-        :type s1: str
-        :type s2: str
-        :rtype: bool
-        """
+    def isScramble(self, s1: str, s2: str) -> bool:
         return is_scramble(s1, s2)
