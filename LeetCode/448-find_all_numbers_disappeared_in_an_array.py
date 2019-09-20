@@ -19,6 +19,16 @@ def find_disappeared_v2(nums):
         r += 1
     return missing[:l]
 
+def find_disappeared_v3(nums):
+    n = len(nums)
+    for i in range(n):
+        x = abs(nums[i])
+        nums[x-1] = -abs(nums[x-1])
+    return [i+1 for i in range(n) if nums[i] > 0]
+
+def find_disappeared_v4(nums):
+    pass
+
 class Solution:
     def findDisappearedNumbers(self, nums: List[int]) -> List[int]:
-        return find_disappeared_v2(nums)
+        return find_disappeared_v3(nums)

@@ -1,4 +1,10 @@
-def rotate_array(nums, k):
+def rotate_array_v1(nums, k):
+    if not nums:
+        return
+    n = len(nums)
+    k = k % n
+
+def rotate_array_v2(nums, k):
     if not nums:
         return
     n = len(nums)
@@ -19,4 +25,4 @@ class Solution:
         :type k: int
         :rtype: void Do not return anything, modify nums in-place instead.
         """
-        return rotate_array(nums, k)
+        return rotate_array_v2(nums, k)
