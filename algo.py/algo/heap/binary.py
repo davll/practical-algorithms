@@ -1,23 +1,30 @@
-# Binary Heap
-#
-# Consider k-th element of the array (k: 1 indexed)
-# - its left child is located at 2*k index
-# - its right child is located at 2*k+1 index
-# - its parent is located at k/2 index
-# - its parent is larger than or equal to it (Max-Heap)
+"""
+Binary Heap
 
-from typing import TypeVar, Generic, MutableSequence, Callable
+Consider k-th element of the array (k: 1 indexed)
+- its left child is located at 2*k index
+- its right child is located at 2*k+1 index
+- its parent is located at k/2 index
+- its parent is larger than or equal to it (Max-Heap)
+"""
+
 import operator as op
 
-T = TypeVar('T')
+def heapify(h, n: int, i: int, lt = op.lt) -> None:
+    """
+    transform the array `h` into a heap inplace
 
-# T = O(log(n))
-def heapify(h: MutableSequence[T], n: int, i: int, lt: Callable[[T,T],bool] = op.lt) -> None:
+    Time Complexity: O(log(n))
+    """
     i = heap_shiftup(h, i, lt)
     heap_shiftdown(h, n, i, lt)
 
-# T = O(log(n))
-def heap_shiftup(h: MutableSequence[T], i: int, lt: Callable[[T,T],bool] = op.lt) -> int:
+def heap_shiftup(h, i: int, lt = op.lt) -> int:
+    """
+    move up the `i`-th element in `h` to satify its heap property
+
+    Time Complexity: O(log(n))
+    """
     while i > 0:
         p = (i - 1) // 2 # parent
         if lt(h[p], h[i]):
@@ -27,8 +34,12 @@ def heap_shiftup(h: MutableSequence[T], i: int, lt: Callable[[T,T],bool] = op.lt
             break
     return i
 
-# T = O(log(n))
-def heap_shiftdown(h: MutableSequence[T], n: int, i: int, lt: Callable[[T,T],bool] = op.lt) -> int:
+def heap_shiftdown(h, n: int, i: int, lt = op.lt) -> int:
+    """
+    move down the `i`-th element in `h` to satify its heap property
+
+    Time Complexity: O(log(n))
+    """
     while i < n:
         l = i * 2 + 1 # left child
         r = i * 2 + 2 # right child
@@ -47,23 +58,39 @@ def heap_shiftdown(h: MutableSequence[T], n: int, i: int, lt: Callable[[T,T],boo
 max_heap_lt = op.lt
 min_heap_lt = op.gt
 
-# T = O(1)
-def heap_peak(h: MutableSequence[T]) -> T:
+def heap_peak(h):
+    """
+    Peak the root of the heap `h`
+
+    Time Complexity: O(1)
+    """
     return h[0]
 
-# T = O(n)
-def heap_init(a: MutableSequence[T], lt: Callable[[T,T],bool] = op.lt) -> None:
+def heap_init(a, lt = op.lt) -> None:
+    """
+    Initialize the heap `a` inplace
+
+    Time Complexity: O(n)
+    """
     for i in range(1, len(a)+1):
         heap_shiftup(a, i-1, lt=lt)
 
-# T = O(log(n))
-def heap_pop(h: MutableSequence[T], lt: Callable[[T,T],bool] = op.lt) -> T:
+def heap_pop(h, lt = op.lt):
+    """
+    Extract the largest value from the heap `h`
+
+    Time Complexity: O(log(n))
+    """
     h[0], h[-1] = h[-1], h[0]
     heap_shiftdown(h, len(h)-1, 0, lt=lt)
     return h.pop()
 
-# T = O(log(n))
-def heap_push(h: MutableSequence[T], x: T, lt: Callable[[T,T],bool] = op.lt) -> None:
+def heap_push(h, x, lt = op.lt) -> None:
+    """
+    Add the value `x` to the heap `h`
+
+    Time Complexity: O(log(n))
+    """
     h.append(x)
     heap_shiftup(h, len(h)-1, lt=lt)
 

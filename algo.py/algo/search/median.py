@@ -1,12 +1,13 @@
 # Find Median
 
-from typing import TypeVar, Sequence, Generic, List, Iterator
-from algo.data.heap.binary import min_heap_push, max_heap_push, min_heap_pop, max_heap_pop, min_heap_peak, max_heap_peak
+from ..heap.binary import min_heap_push, max_heap_push, min_heap_pop, max_heap_pop, min_heap_peak, max_heap_peak
 
-T = TypeVar('T', int, float)
+def find_median_of_two_sorted(arr1, arr2):
+    """
+    Find the median value from two sorted arrays
 
-# T = O(log(min(m,n)))
-def find_median_of_two_sorted(arr1: Sequence[T], arr2: Sequence[T]) -> float:
+    Time Complexity: O(log(min(m,n)))
+    """
     from math import inf
     # arr1 should be smaller than arr2
     if len(arr1) > len(arr2):
@@ -89,14 +90,21 @@ def find_median_of_two_sorted(arr1: Sequence[T], arr2: Sequence[T]) -> float:
     else:
         return (max(get(arr1, i-1), get(arr2, j-1)) + min(get(arr1, i), get(arr2, j))) / 2
 
-# Find running medians from stream
-class MedianHeap(Generic[T]):
+
+class MedianHeap:
+    """
+    Find running medians from stream
+    """
+    #
     def __init__(self):
-        self.left: List[T] = []
-        self.right: List[T] = []
+        self.left = []
+        self.right = []
         self.even = True
     #
-    def append(self, x: T):
+    def append(self, x):
+        """
+        Add a number to the storage
+        """
         if self.even:
             min_heap_push(self.right, x)
             max_heap_push(self.left, min_heap_pop(self.right))
@@ -105,7 +113,10 @@ class MedianHeap(Generic[T]):
             min_heap_push(self.right, max_heap_pop(self.left))
         self.even = not self.even
     #
-    def query(self) -> float:
+    def get_median(self):
+        """
+        Get the median value
+        """
         if not self.left:
             raise IndexError()
         if self.even:

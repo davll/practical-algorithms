@@ -1,8 +1,21 @@
-from typing import TypeVar, Iterator, Sequence, MutableSequence
+from collections.abc import Sequence
 
-T = TypeVar('T', int, float)
+class ListSlice(Sequence):
+    def __init__(self, arr, start = 0, end = None):
+        self.arr = arr
+        self.start = start
+        self.end = end if end is not None else len(arr)
+    #
+    def __len__(self):
+        return self.end - self.start
+    #
+    def __getitem__(self, i):
+        return self.arr[(i + self.start)]
+    #
+    def __setitem__(self, i, x):
+        self.arr[(i + self.start)] = x
 
-def merge_sorted(xs: Sequence[T], ys: Sequence[T], xl: int, xr: int, yl: int, yr: int) -> Iterator[T]:
+def merge_sorted(xs, ys, xl: int, xr: int, yl: int, yr: int):
     while xl < xr and yl < yr:
         if xs[xl] < ys[yl]:
             yield xs[xl]
@@ -17,10 +30,12 @@ def merge_sorted(xs: Sequence[T], ys: Sequence[T], xl: int, xr: int, yl: int, yr
         yield ys[yl]
         yl += 1
 
-def reverse(xs: MutableSequence[T], l: int, r: int) -> None:
+def reverse(xs, l=0, r=None):
+    r = len(xs) if r is None else r
+    r = r-1
     while l < r:
         xs[l], xs[r] = xs[r], xs[l]
         l, r = l+1, r-1
 
-def right_rotate(xs: MutableSequence[T], k: int) -> None:
+def right_rotate(xs, k: int):
     raise NotImplementedError()

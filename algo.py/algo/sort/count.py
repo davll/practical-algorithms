@@ -1,7 +1,7 @@
-from typing import MutableSequence
+# Counting Sort
 
 # T = O(nk)
-def countsort(arr: MutableSequence[int]) -> MutableSequence[int]:
+def countsort(arr):
     maxval, minval = max(arr), min(arr)
     n, k = len(arr), (maxval - minval + 1)
     count = [0] * k

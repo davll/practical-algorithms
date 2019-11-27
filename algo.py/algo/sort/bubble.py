@@ -1,16 +1,14 @@
 # Bubble Sort
-#
-# Worst case: O(n^2) comparisons, O(n^2) swaps
-# Avg case: O(n^2) comparisons, O(n^2) swaps
-# Best case: O(n) comparisons, O(1) swaps
-# Worst case space: O(1) auxiliary
-#
 
-from typing import TypeVar, MutableSequence
+def bubblesort(a):
+    """
+    Sort an array inplace with bubble sorting algorithm
 
-T = TypeVar('T', int, float)
-
-def bubblesort(a: MutableSequence[T]) -> None:
+    - Worst case: O(n^2) comparisons, O(n^2) swaps
+    - Avg case: O(n^2) comparisons, O(n^2) swaps
+    - Best case: O(n) comparisons, O(1) swaps
+    - Worst case space: O(1) auxiliary
+    """
     n = len(a)
     for _ in range(n):
         for i in range(n-1):

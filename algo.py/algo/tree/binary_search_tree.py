@@ -1,8 +1,7 @@
 # Binary Search Tree
 #
-# 1. the key in each node >= any keys in the left sub-tree
-# 2. the key in each node <= any keys in the right sub-tree
-# 3. the leaves contain no key
+# 1. the key of the node >= any keys in the left sub-tree
+# 2. the key of the node <= any keys in the right sub-tree
 
 from collections import deque
 
@@ -42,6 +41,8 @@ class Node:
         self.value = value
         self.left = None
         self.right = None
+    def is_leaf(self):
+        return self.left is None and self.right is None
 
 def bst_search(root, key):
     while root is not None and root.key != key:

@@ -1,16 +1,6 @@
-# Merge Sort
-
 from collections import deque
 
 def mergesort_r(arr, first, end, aux = None):
-    """
-    Sort the array `arr` inplace with merge sort algorithm
-
-    - Worst case: O(n*log(n))
-    - Avg case: O(n*log(n))
-    - Best case: O(n*log(n)) typical, O(n) natural variant
-    - Worst case space: O(n) aux; O(1) aux for linked lists
-    """
     if first >= end-1:
         return
     if aux is None:
@@ -47,9 +37,6 @@ def mergesort_i(arr):
             q.appendleft((first2, end2))
 
 def merge_array(dst, offset, src1, first1, end1, src2, first2, end2):
-    """
-    Merge two sorted arrays (`src1` and `src2`) into one (`dst`)
-    """
     i, j, k = first1, first2, offset
     while i < end1 and j < end2:
         if src1[i] <= src2[j]:
@@ -65,3 +52,28 @@ def merge_array(dst, offset, src1, first1, end1, src2, first2, end2):
     while j < end2:
         dst[k] = src2[j]
         j, k = j+1, k+1
+
+def countsort(arr):
+    maxval, minval = max(arr), min(arr)
+    n, k = len(arr), (maxval - minval + 1)
+    count = [0] * k
+    # count values
+    for x in arr:
+        count[x - minval] += 1
+    # transform to actual position
+    for i in range(1, k):
+        count[i] += count[i-1]
+    # build output
+    result = [0] * n
+    for (i, x) in enumerate(arr):
+        j = count[x - minval] - 1
+        result[j] = x
+        count[x - minval] -= 1
+    return result
+
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+        #mergesort_r(nums, 0, len(nums))
+        #mergesort_i(nums)
+        #return nums
+        return countsort(nums)

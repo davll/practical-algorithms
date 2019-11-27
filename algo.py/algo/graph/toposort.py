@@ -3,10 +3,12 @@
 # Lemma: After DFS, if it exists a path from vertex A to vertex B,
 #        then finish[A] > finish[B]
 
+from .dfs import dfs
+
 # Legacy DFS algorithm
 def toposort_dfs(graph):
     from algo.graph.dfs import dfs
-    stack = list(dfs(graph, postorder=True))
+    stack = list(dfs(graph, mode='postorder'))
     # order by finish time (from new to old)
     stack.reverse()
     return stack

@@ -1,16 +1,19 @@
-from typing import Optional, Callable, Sequence, TypeVar, Union
-from ..ty import Comparable
+# Binary Search
+#
+# https://ai.googleblog.com/2006/06/extra-extra-read-all-about-it-nearly.html
 
-T = TypeVar('T', bound=Comparable)
-
-def _make_func(seq_or_func: Union[Sequence[T], Callable[[int], T]]) -> Callable[[int], T]:
+def _make_func(seq_or_func):
     if callable(seq_or_func):
         return seq_or_func
     else:
         return lambda i: seq_or_func[i]
 
-def binary_search(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int, end: int, target: T) -> Optional[int]:
-    """Find the element in the range [first, end) with its value = target"""
+def binary_search(seq_or_func, first: int, end: int, target):
+    """
+    Find a element in the range [first, end) with its value == target
+
+    Time Complexity: O(log(n))
+    """
     func = _make_func(seq_or_func)
     while first < end:
         mid = (first + end) // 2
@@ -26,8 +29,17 @@ def binary_search(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: in
             first = mid + 1
     return None
 
-def lower_bound(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int, end: int, target: T) -> int:
-    """Find the first element in the range [first, end) with its value >= target"""
+def lower_bound(seq_or_func, first: int, end: int, target) -> int:
+    """
+    Find the first element in the range [first, end) with its value >= target
+
+    Example:
+        i = lower_bound(arr, 0, len(arr), k)
+        # all the elements of arr[i:] are greater than or equal to k
+        # all the elements of arr[:i] are less than k
+    
+    Time Complexity: O(log(n))
+    """
     func = _make_func(seq_or_func)
     result = end
     while first < end:
@@ -40,8 +52,17 @@ def lower_bound(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int,
             first = mid + 1
     return result
 
-def upper_bound(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int, end: int, target: T) -> int:
-    """Find the first element in the range [first, end) with its value > target"""
+def upper_bound(seq_or_func, first: int, end: int, target) -> int:
+    """
+    Find the first element in the range [first, end) with its value > target
+
+    Example:
+        i = lower_bound(arr, 0, len(arr), k)
+        # all the elements of arr[i:] are greater than k
+        # all the elements of arr[:i] are less than or equal to k
+    
+    Time Complexity: O(log(n))
+    """
     func = _make_func(seq_or_func)
     result = end
     while first < end:
@@ -54,16 +75,9 @@ def upper_bound(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int,
             first = mid + 1
     return result
 
-def floor_search(seq_or_func: Union[Sequence[T], Callable[[int], T]], first: int, end: int, target: T) -> Optional[int]:
-    """Find the last element in the range [first, end) with its value < target"""
-    func = _make_func(seq_or_func)
-    result = None
-    raise NotImplementedError()
-    return result
-
 # References:
+#
 # https://github.com/python/cpython/blob/3.7/Lib/bisect.py
-# https://ai.googleblog.com/2006/06/extra-extra-read-all-about-it-nearly.html
 # http://www.cplusplus.com/reference/algorithm/binary_search/
 # http://www.cplusplus.com/reference/algorithm/lower_bound/
 # http://www.cplusplus.com/reference/algorithm/upper_bound/

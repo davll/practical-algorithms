@@ -1,6 +1,7 @@
 # Huffman Coding Tree
 
 import heapq
+#from ..heap.binary import heap_init, heap_peak, heap_pop, heap_push
 
 class Node:
     def __init__(self, k, f):

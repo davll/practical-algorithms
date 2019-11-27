@@ -1,7 +1,5 @@
 # https://www.geeksforgeeks.org/k-th-element-two-sorted-arrays/
 
-import unittest
-
 # T = O(k)
 def kth_v1(l1, l2, k):
     """

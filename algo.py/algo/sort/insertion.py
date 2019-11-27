@@ -1,15 +1,14 @@
 # Insertion Sort
-#
-# Worst case: O(n^2) comparisons, swaps
-# Avg case: O(n^2) comparisons, swaps
-# Best case: O(n) comparisons, O(1) swaps
-# Worst case space: O(1) aux
 
-from typing import TypeVar, MutableSequence
+def insertionsort(a):
+    """
+    Sort an array inplace with insertion sorting algorithm
 
-T = TypeVar('T', int, float)
-
-def insertionsort(a: MutableSequence[T]) -> None:
+    - Worst case: O(n^2) comparisons, swaps
+    - Avg case: O(n^2) comparisons, swaps
+    - Best case: O(n) comparisons, O(1) swaps
+    - Worst case space: O(1) aux
+    """
     n = len(a)
     for i in range(1, n):
         for j in range(i, 0, -1):

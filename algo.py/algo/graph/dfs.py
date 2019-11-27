@@ -21,17 +21,19 @@ def dfs_visit_postorder(u, graph, visited):
     # visit vertex u
     yield u
 
-def dfs(graph, postorder = False, sources = None):
+def dfs(graph, sources = None, mode = 'preorder'):
     n = len(graph)
     visited = [False] * n
     sources = iter(sources) if sources else range(n)
     for s in sources:
         if visited[s]:
             continue
-        if postorder:
+        if mode == 'postorder':
             yield from dfs_visit_postorder(s, graph, visited)
-        else:
+        elif mode == 'preorder':
             yield from dfs_visit_preorder(s, graph, visited)
+        else:
+            raise ValueError("Invalid mode = {}".format(mode))
 
 def detect_cycle(graph):
     n = len(graph)

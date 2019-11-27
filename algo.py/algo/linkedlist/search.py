@@ -1,7 +1,9 @@
 from . import Node
 
-# Floyd's Tortoise and Hare Algorithm
 def detect_cycle(head) -> bool:
+    """
+    Floyd's Tortoise and Hare Algorithm
+    """
     if not head:
         return False
     slow, fast = head, head

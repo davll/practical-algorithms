@@ -6,11 +6,7 @@
 # Worst case space: O(1) aux
 #
 
-from typing import TypeVar, MutableSequence, Iterator
-
-T = TypeVar('T', int, float)
-
-def shellsort(arr: MutableSequence[T], gaps: Iterator[int] = None) -> None:
+def shellsort(arr, gaps = None):
     n = len(arr)
     if not gaps:
         gaps = iter([701, 301, 132, 57, 23, 10, 4, 1])
