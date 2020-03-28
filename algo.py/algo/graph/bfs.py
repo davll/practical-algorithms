@@ -20,7 +20,7 @@ def bfs(graph, source = None):
     """
     Breadth First Search
 
-    Time Complexity: O(n)
+    Time Complexity: O(V+E)
     """
     n = len(graph)
     visited = [False] * n

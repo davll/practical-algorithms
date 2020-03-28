@@ -16,7 +16,7 @@ def compute_v1(n):
     dp[:2] = [0, 1]
     for x in range(2, n+1):
         dp[x] = min(map(lambda c: dp[x-c]+1, coins(x)))
-    return dp
+    return dp[-1]
 
 # 1) Lagrange's Four Square theorem
 # 2) Legendre's three square theorem

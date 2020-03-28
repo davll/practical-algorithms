@@ -2,3 +2,5 @@
 /dist/
 /*.egg-info
 /.eggs
+Digraph.gv
+Digraph.gv.pdf

@@ -99,13 +99,29 @@ def bt_inorder_i(root):
         if curr is not None:
             stack.append(curr)
             curr = curr.left
-        elif len(stack) > 0:
+        elif stack:
             curr = stack.pop()
             assert curr is not None
             yield curr
             curr = curr.right
         else:
             break
+
+def bt_inorder_i2(root):
+    stack = []
+    #
+    curr = root
+    while curr:
+        stack.append(curr)
+        curr = curr.left
+    #
+    while stack:
+        curr = stack.pop()
+        yield curr
+        curr = curr.right
+        while curr:
+            stack.append(curr)
+            curr = curr.left
 
 def bt_postorder_i(root):
     if root is None:

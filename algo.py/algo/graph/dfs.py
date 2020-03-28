@@ -1,25 +1,33 @@
 # Depth-First Search
 
-def dfs_visit_preorder(u, graph, visited):
+def dfs_visit_preorder_r(u, graph, visited):
     assert not visited[u]
     # visit and mark vertex u
     yield u
     visited[u] = True
     # visit neighbours
-    for (v,_) in graph.edges_from(u):
+    for (_,v,_) in graph.edges_from(u):
         if not visited[v]:
-            yield from dfs_visit_preorder(v, graph, visited)
+            yield from dfs_visit_preorder_r(v, graph, visited)
 
-def dfs_visit_postorder(u, graph, visited):
+def dfs_visit_postorder_r(u, graph, visited):
     assert not visited[u]
     # mark vertex u
     visited[u] = True
     # visit neighbours
-    for (v,_) in graph.edges_from(u):
+    for (_,v,_) in graph.edges_from(u):
         if not visited[v]:
-            yield from dfs_visit_postorder(v, graph, visited)
+            yield from dfs_visit_postorder_r(v, graph, visited)
     # visit vertex u
     yield u
+
+def dfs_visit_preorder_i(u, graph, visited):
+    assert not visited[u]
+    pass
+
+def dfs_visit_postorder_i(u, graph, visited):
+    assert not visited[u]
+    pass
 
 def dfs(graph, sources = None, mode = 'preorder'):
     n = len(graph)
@@ -29,9 +37,9 @@ def dfs(graph, sources = None, mode = 'preorder'):
         if visited[s]:
             continue
         if mode == 'postorder':
-            yield from dfs_visit_postorder(s, graph, visited)
+            yield from dfs_visit_postorder_r(s, graph, visited)
         elif mode == 'preorder':
-            yield from dfs_visit_preorder(s, graph, visited)
+            yield from dfs_visit_preorder_r(s, graph, visited)
         else:
             raise ValueError("Invalid mode = {}".format(mode))
 
